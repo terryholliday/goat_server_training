@@ -29,14 +29,7 @@ const VirtualTrainer: React.FC = () => {
                     <p className="text-gray-800 font-medium text-lg font-serif leading-relaxed">
                         {message}
                     </p>
-                    {/* Close button */}
-                    <button
-                        onClick={hideTrainer}
-                        className="absolute -top-3 -right-3 bg-white hover:bg-red-50 text-red-400 border border-red-100 rounded-full w-6 h-6 flex items-center justify-center shadow-sm transition-colors"
-                        aria-label="Close trainer"
-                    >
-                        ✕
-                    </button>
+
                     {/* Triangle pointer */}
                     <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white border-b-2 border-r-2 border-indigo-100 transform rotate-45 z-10"></div>
                 </div>
