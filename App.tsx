@@ -61,7 +61,7 @@ const QUIZ_DATA: Record<string, { questions: typeof GENERAL_INFO_QUIZ; accent: '
   'service-quiz': { questions: SERVICE_QUIZ, accent: 'green' },
   'terms-quiz': { questions: TERMS_QUIZ, accent: 'rose' },
   'menu-quiz': { questions: MENU_QUIZ, accent: 'purple' },
-  'menu-quiz': { questions: MENU_QUIZ, accent: 'purple' },
+
   'wine-quiz': { questions: WINE_QUIZ, accent: 'amber' },
   'fine-dining-quiz': { questions: FINE_DINING_QUIZ, accent: 'rose' },
 };
