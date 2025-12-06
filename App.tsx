@@ -16,14 +16,13 @@ import { Button } from './components/Button';
 import { MenuMasterySection } from './components/MenuMasterySection';
 import { GuestScenariosSection } from './components/GuestScenariosSection';
 import { TrainerProvider, useTrainer } from './contexts/TrainerContext';
-import VirtualTrainer from './components/VirtualTrainer';
-import { FineDiningSection } from './components/FineDiningSection';
+import { TrainingCockpit } from './components/TrainingCockpit';
+import { soundService } from './services/SoundService';
 import { getRandomScript } from './data/marcelScripts';
 import {
   GENERAL_INFO_QUIZ,
   SERVICE_QUIZ,
   TERMS_QUIZ,
-  MENU_QUIZ,
   MENU_QUIZ,
   WINE_QUIZ,
   FINE_DINING_QUIZ,
@@ -103,251 +102,142 @@ const AppContent: React.FC = () => {
   }
 
   // Load progress on mount
-  const loadProgress = useCallback(async () => {
-    if (!user) return;
-
-    try {
-      setLoadingProgress(true);
-      let userProgress = await getTrainingProgress(user.uid);
-
-      if (!userProgress) {
-        userProgress = await initializeProgress(user.uid);
+  useEffect(() => {
+    async function loadProgress() {
+      if (user) {
+        try {
+          const p = await getTrainingProgress(user.uid);
+          if (p) {
+            setProgress(p);
+          } else {
+            console.log('No progress found, initializing...');
+            const newProgress = await initializeProgress(user.uid);
+            setProgress(newProgress);
+          }
+        } catch (error) {
+          console.error("Failed to load progress:", error);
+        } finally {
+          setLoadingProgress(false);
+        }
       }
-
-      setProgress(userProgress);
-    } catch (error) {
-      console.error('Error loading progress:', error);
-    } finally {
-      setLoadingProgress(false);
     }
+    loadProgress();
   }, [user]);
 
-  useEffect(() => {
-    if (user) {
-      loadProgress();
-    }
-  }, [user, loadProgress]);
-
-  // Handle section completion
   const handleSectionComplete = async () => {
-    if (viewingSectionIndex === null || !user) return;
+    if (!user || !progress || viewingSectionIndex === null) return;
 
+    // Award point for completing content
+    setIsSaving(true);
     try {
-      setIsSaving(true);
-      await markSectionComplete(user.uid, viewingSectionIndex);
-      await loadProgress(); // Reload to get updated state
+      const currentSection = SECTIONS[viewingSectionIndex];
+      // Only unlock next if this is the currently unlocked one (prevent re-unlocking)
+      const shouldUnlockNext = viewingSectionIndex === unlockedSectionIndex; // && currentSection.type === 'content';
+
+      // Always mark as completed in list
+      const newProgress = await markSectionComplete(user.uid, viewingSectionIndex, shouldUnlockNext);
+      setProgress(newProgress);
+      setViewingSectionIndex(null); // Return to dashboard
     } catch (error) {
-      console.error('Error saving progress:', error);
+      console.error("Failed to save progress:", error);
     } finally {
       setIsSaving(false);
-      setViewingSectionIndex(null);
-      // Trigger Marcel for section completion
-      const script = getRandomScript('streak');
-      say(script.text, 3000);
     }
   };
 
-  // Handle quiz completion
-  const handleQuizComplete = async (quizId: string, passed: boolean, score: number, total: number) => {
-    if (viewingSectionIndex === null || !user) return;
-
+  const handleQuizComplete = async (score: number, total: number, passed: boolean) => {
+    if (!user || !progress || viewingSectionIndex === null) return;
+    setIsSaving(true);
     try {
-      setIsSaving(true);
-
-      // Save quiz score
-      await saveQuizScore(user.uid, {
-        quizId,
-        score,
-        totalQuestions: total,
-        passed,
-        completedAt: new Date()
-      });
-
-      // Mark section complete if passed
-      if (passed) {
-        await markSectionComplete(user.uid, viewingSectionIndex);
+      const section = SECTIONS[viewingSectionIndex];
+      // Save specific quiz score
+      if (section.id) {
+        await saveQuizScore(user.uid, section.id, score, total);
       }
 
-      await loadProgress();
-    } catch (error) {
-      console.error('Error saving quiz result:', error);
-    } finally {
-      setIsSaving(false);
-      setViewingSectionIndex(null);
-
       if (passed) {
-        const script = getRandomScript('correct');
-        showTrainer(script.text, script.emotion);
+        // Unlock next section
+        const newProgress = await markSectionComplete(user.uid, viewingSectionIndex, true);
+        setProgress(newProgress);
+        setViewingSectionIndex(null); // Return to dashboard on pass
+        soundService.playSuccess();
+        say("Excellent work! You've mastered this section.", 3000, 'happy');
       } else {
-        const script = getRandomScript('incorrect');
-        showTrainer(script.text, script.emotion);
+        say("Not quite there yet. Review the material and try again!", 3000, 'stern');
       }
+    } catch (error) {
+      console.error("Failed to save quiz:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  // Handle final exam completion
-  const handleFinalExamComplete = async (passed: boolean, score: number, total: number) => {
-    if (!user) return;
-
+  const handleExamComplete = async (score: number, total: number, passed: boolean) => {
+    if (!user || !progress) return;
+    setIsSaving(true);
     try {
-      setIsSaving(true);
       await saveFinalExamAttempt(user.uid, score, total, passed);
+      // Reload progress to update state
+      const p = await getTrainingProgress(user.uid);
+      setProgress(p);
+      setViewingSectionIndex(null);
 
       if (passed) {
-        await markSectionComplete(user.uid, SECTIONS.length - 1);
+        say("Félicitations! You are now a certified French Goat server!", 5000, 'happy');
       }
-
-      await loadProgress();
     } catch (error) {
-      console.error('Error saving exam result:', error);
+      console.error("Failed to save exam:", error);
     } finally {
       setIsSaving(false);
-      if (passed) {
-        setViewingSectionIndex(null);
-        showTrainer("Congratulations! You have passed the final exam!", 'happy');
-      } else {
-        showTrainer("Do not give up! Review the material and try again.", 'stern');
-      }
     }
   };
 
   const handleViewSection = (index: number) => {
-    if (index <= unlockedSectionIndex) {
-      setViewingSectionIndex(index);
-    }
+    setViewingSectionIndex(index);
+    // Trigger virtual trainer for this section?
+    const section = SECTIONS[index];
+    say(`Starting ${section.title}. Good luck!`, 2000);
   };
 
   const handleReturnToDashboard = () => {
     setViewingSectionIndex(null);
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
-  };
-
-  // Render active section component
-  const renderActiveSection = () => {
-    if (viewingSectionIndex === null) return null;
-
-    const section = SECTIONS[viewingSectionIndex];
-
-    // Content sections
-    if (section.type === 'content') {
-      switch (section.id) {
-        case 'general-info':
-          return <GeneralInfoSection onComplete={handleSectionComplete} />;
-        case 'sequence-of-service':
-          return <SequenceSection onComplete={handleSectionComplete} />;
-        case 'culinary-terms':
-          return <TermsSection onComplete={handleSectionComplete} />;
-        case 'menu-mastery':
-          return <MenuMasterySection onComplete={handleSectionComplete} />;
-        case 'wine-knowledge':
-          return <WineKnowledgeSection onComplete={handleSectionComplete} />;
-        case 'guest-scenarios':
-          return <GuestScenariosSection onComplete={handleSectionComplete} />;
-        case 'fine-dining-etiquette':
-          return <FineDiningSection onComplete={handleSectionComplete} />;
-        default:
-          return null;
-      }
-    }
-
-    // Quiz sections
-    if (section.type === 'quiz') {
-      const quizData = QUIZ_DATA[section.id];
-      if (quizData) {
-        return (
-          <Quiz
-            title={section.title}
-            quizId={section.id}
-            accent={quizData.accent}
-            questionsSource={quizData.questions}
-            onComplete={(passed, score, total) => handleQuizComplete(section.id, passed, score, total)}
-            isSaving={isSaving}
-          />
-        );
-      }
-    }
-
-    // Final exam
-    if (section.type === 'exam') {
+  // Render the active content (Dashboard or Specific Section)
+  const renderActiveArtifact = () => {
+    if (loadingProgress) {
       return (
-        <FinalExamSection
-          onComplete={handleFinalExamComplete}
-          previousAttempts={progress?.finalExamAttempts as ExamAttempt[] || []}
-          isSaving={isSaving}
-        />
+        <div className="flex justify-center p-10">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        </div>
       );
     }
 
-    return null;
-  };
-
-  // Loading state
-  if (authLoading || loadingProgress) {
-    return (
-      <div className="min-h-screen bg-[#fdfcf9] flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
-          <p className="mt-4 text-gray-600">Loading your training progress...</p>
+    if (showManagerDashboard) {
+      return (
+        <div className="p-4">
+          <ManagerDashboard totalSections={SECTIONS.length} onBack={() => setShowManagerDashboard(false)} />
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  return (
-    <main className="min-h-screen text-[#333] bg-[#fdfcf9]">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-[#2c2c2c] tracking-tight">
-              The French Goat Training Program
-            </h1>
-            <div className="flex items-center gap-3">
-              {userProfile?.role === 'manager' && !showManagerDashboard && (
-                <Button
-                  variant="outline"
-                  onClick={() => setShowManagerDashboard(true)}
-                  aria-label="Open manager dashboard"
-                >
-                  Manager Dashboard
-                </Button>
-              )}
-              <Button
-                variant="ghost"
-                onClick={handleLogout}
-                aria-label="Sign out"
-              >
-                Sign Out
-              </Button>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <p className="text-base text-gray-600">
-              Welcome back, <span className="font-semibold">{userProfile?.displayName || user?.email}</span>
-            </p>
+    if (viewingSectionIndex === null) {
+      return (
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Server Training Portal</h1>
+            <p className="text-gray-600">Master the art of service at The French Goat.</p>
             {userProfile?.role === 'manager' && (
-              <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full font-medium">
-                Manager
-              </span>
+              <Button
+                variant="outline"
+                onClick={() => setShowManagerDashboard(true)}
+                className="mt-4"
+              >
+                Manager Dashboard
+              </Button>
             )}
           </div>
-        </header>
 
-        {/* Main Content */}
-        {showManagerDashboard ? (
-          <ManagerDashboard
-            totalSections={SECTIONS.length}
-            onBack={() => setShowManagerDashboard(false)}
-          />
-        ) : viewingSectionIndex === null ? (
           <CourseDashboard
             sections={SECTIONS}
             unlockedSectionIndex={unlockedSectionIndex}
@@ -355,28 +245,87 @@ const AppContent: React.FC = () => {
             quizScores={quizScores}
             onSelectSection={handleViewSection}
           />
-        ) : (
-          <div className="relative">
-            <Button
-              variant="outline"
-              onClick={handleReturnToDashboard}
-              className="mb-6"
-              aria-label="Go back to course outline"
-            >
-              &larr; Back to Course Outline
-            </Button>
-            {renderActiveSection()}
-          </div>
-        )}
+        </div>
+      );
+    }
 
-        {/* Virtual Trainer Component */}
-        <VirtualTrainer />
+    // Render Active Section
+    const renderActiveSection = () => {
+      const section = SECTIONS[viewingSectionIndex];
+      const commonProps = {
+        onComplete: handleSectionComplete,
+      };
+
+      switch (section.id) {
+        // Content Sections
+        case 'general-info': return <GeneralInfoSection {...commonProps} />;
+        case 'sequence-of-service': return <SequenceSection {...commonProps} />;
+        case 'culinary-terms': return <TermsSection {...commonProps} />;
+        case 'menu-mastery': return <MenuMasterySection {...commonProps} />;
+        case 'wine-knowledge': return <WineKnowledgeSection {...commonProps} />;
+        case 'guest-scenarios': return <GuestScenariosSection {...commonProps} />;
+        case 'fine-dining-etiquette': return <FineDiningSection {...commonProps} />;
+
+        // Quiz Sections
+        case 'general-info-quiz':
+        case 'service-quiz':
+        case 'terms-quiz':
+        case 'menu-quiz':
+        case 'wine-quiz':
+        case 'fine-dining-quiz':
+          const quizData = QUIZ_DATA[section.id];
+          return (
+            <Quiz
+              title={section.title}
+              questionsSource={quizData.questions} // Changed from 'questions' to 'questionsSource' to match original Quiz prop
+              accent={quizData.accent}
+              onComplete={(passed, score, total) => handleQuizComplete(score, total, passed)} // Adjusted signature
+              onCancel={handleReturnToDashboard}
+            />
+          );
+
+        // Final Exam
+        case 'final-exam':
+          return <FinalExamSection onComplete={(passed, score, total) => handleExamComplete(score, total, passed)} previousAttempts={progress?.finalExamAttempts as ExamAttempt[] || []} onCancel={handleReturnToDashboard} isSaving={isSaving} />; // Added previousAttempts and isSaving to match original FinalExamSection props
+
+        default:
+          return <div>Section component not implemented yet.</div>;
+      }
+    };
+
+    return (
+      <div className="relative max-w-5xl mx-auto">
+        <Button
+          variant="outline"
+          onClick={handleReturnToDashboard}
+          className="mb-6"
+          aria-label="Go back to course outline"
+        >
+          &larr; Back to Course Outline
+        </Button>
+        {renderActiveSection()}
       </div>
+    );
+  };
 
-      <footer className="text-center py-6 text-sm text-gray-500 border-t mt-10">
-        <p>&copy; {new Date().getFullYear()} The French Goat. All Rights Reserved.</p>
-      </footer>
-    </main>
+  return (
+    <>
+      {/* 
+        TrainingCockpit is the new Shell.
+        We pass the active content (Dashboard or Section) as 'activeArtifact'.
+        The ChatHistory is mocked for now or could be hooked up later.
+      */}
+      <TrainingCockpit
+        activeArtifact={renderActiveArtifact()}
+        chatHistory={[
+          { role: 'assistant', content: "Bonjour! I am Marcel, your virtual maitre d'. I am here to help you master our menu and service standards." }
+        ]}
+        onSendMessage={(msg) => say(msg, 3000)} // Simple echo for now
+      />
+
+      {/* Virtual Trainer (Marcel) Floats above everything */}
+      <VirtualTrainer />
+    </>
   );
 };
 

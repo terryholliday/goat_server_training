@@ -27,6 +27,7 @@ interface QuizProps {
   questionsSource: MCQ[];
   onComplete: (passed: boolean, score: number, total: number) => void;
   passingThreshold?: number;
+  onCancel: () => void;
   isSaving?: boolean;
 }
 
@@ -75,6 +76,7 @@ export const Quiz: React.FC<QuizProps> = ({
   questionsSource,
   onComplete,
   passingThreshold = 0.8,
+  onCancel,
   isSaving = false
 }) => {
   const [quizState, setQuizState] = useState(() => createInitialState(questionsSource));
@@ -249,8 +251,8 @@ export const Quiz: React.FC<QuizProps> = ({
                 role="radio"
                 aria-checked={selected === i}
                 className={`w-full text-left border rounded-md px-4 py-3 transition-colors text-gray-800 ${selected === i
-                    ? `${styles.bg} ${styles.border} ring-2 ${styles.ring}`
-                    : 'bg-white hover:bg-gray-50 border-gray-300'
+                  ? `${styles.bg} ${styles.border} ring-2 ${styles.ring}`
+                  : 'bg-white hover:bg-gray-50 border-gray-300'
                   }`}
               >
                 {option}
@@ -260,13 +262,16 @@ export const Quiz: React.FC<QuizProps> = ({
           <div className="flex justify-between mt-6">
             <Button
               variant="outline"
-              disabled={index === 0}
               onClick={() => {
-                setQuizState(prev => ({ ...prev, index: prev.index - 1, selected: answers[index - 1] }));
+                if (index === 0) {
+                  onCancel();
+                } else {
+                  setQuizState(prev => ({ ...prev, index: prev.index - 1, selected: answers[index - 1] }));
+                }
               }}
-              aria-label="Go to previous question"
+              aria-label={index === 0 ? "Cancel quiz" : "Go to previous question"}
             >
-              Back
+              {index === 0 ? "Cancel" : "Back"}
             </Button>
             <Button
               onClick={submitAnswer}

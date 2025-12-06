@@ -9,12 +9,14 @@ import type { ExamAttempt } from '../types';
 interface FinalExamSectionProps {
   onComplete: (passed: boolean, score: number, total: number) => void;
   previousAttempts?: ExamAttempt[];
+  onCancel: () => void;
   isSaving?: boolean;
 }
 
 export const FinalExamSection: React.FC<FinalExamSectionProps> = ({
   onComplete,
   previousAttempts = [],
+  onCancel,
   isSaving = false
 }) => {
   const [showExam, setShowExam] = useState(previousAttempts.length === 0);
@@ -100,6 +102,9 @@ export const FinalExamSection: React.FC<FinalExamSectionProps> = ({
                 View Certificate
               </Button>
             )}
+            <Button onClick={onCancel} variant="outline">
+              Close
+            </Button>
           </div>
         </div>
       </SectionWrapper>
@@ -118,6 +123,7 @@ export const FinalExamSection: React.FC<FinalExamSectionProps> = ({
           setShowExam(false); // Show attempt history after failing
         }
       }}
+      onCancel={onCancel}
       isSaving={isSaving}
     />
   );

@@ -56,7 +56,7 @@ export const IMAGE_MAP = {
     `${BASE_IMG_PATH}wine2.jpeg`,
     `${BASE_IMG_PATH}drink1.jpg`
   ],
-  fallback: `${BASE_IMG_PATH}logo.png`, // Fallback
+  fallback: `${BASE_IMG_PATH}the-french-goat.jpg`, // Fallback
 };
 
 export const GENERAL_INFO_PAGES: InfoPage[] = [
