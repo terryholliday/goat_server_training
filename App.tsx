@@ -90,6 +90,10 @@ const AppContent: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(true);
 
+  // Welcome Overlay State
+  const [showWelcome, setShowWelcome] = useState(true);
+  const handleWelcomeDismiss = () => setShowWelcome(false);
+
   // Calculate unlocked section based on progress
   const unlockedSectionIndex = progress?.currentSectionIndex ?? 0;
   const completedSections = progress?.completedSections ?? [];
