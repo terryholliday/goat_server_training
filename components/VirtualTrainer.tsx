@@ -1,24 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTrainer } from '../contexts/TrainerContext';
+import { soundService } from '../services/SoundService';
 
 const VirtualTrainer: React.FC = () => {
-    const { isVisible, message, emotion, hideTrainer } = useTrainer();
+    const { isVisible, message, emotion, hideTrainer, isTalking } = useTrainer();
     const [animateIn, setAnimateIn] = useState(false);
+    const prevMessageRef = useRef<string | null>(null);
 
     useEffect(() => {
         if (isVisible) {
             setAnimateIn(true);
+            soundService.playPop();
         } else {
             const timer = setTimeout(() => setAnimateIn(false), 300);
             return () => clearTimeout(timer);
         }
     }, [isVisible]);
 
+    useEffect(() => {
+        // Speak when message changes and is not null
+        if (message && message !== prevMessageRef.current && isVisible) {
+            soundService.speak(message);
+            prevMessageRef.current = message;
+        }
+    }, [message, isVisible]);
+
     if (!isVisible && !animateIn) return null;
 
     const getEmotionImage = () => {
-        // For now, we use the single avatar, but could swap based on emotion later
-        return '/marcel-avatar.png';
+        switch (emotion) {
+            case 'happy': return '/marcel-happy.png';
+            case 'stern': return '/marcel-stern.png';
+            case 'thinking': return '/marcel-thinking.png';
+            case 'surprised': return '/marcel-surprised.png';
+            default: return '/marcel-neutral.png';
+        }
     };
 
     return (
@@ -43,10 +59,10 @@ const VirtualTrainer: React.FC = () => {
 
             {/* Avatar */}
             <div className="relative group cursor-pointer" onClick={() => hideTrainer()}>
-                <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-white hover:scale-105 transition-transform duration-200 ${emotion === 'happy' ? 'animate-bounce-slight' : ''}`}>
+                <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-white hover:scale-105 transition-transform duration-200 ${isTalking ? 'animate-talk-bob' : ''}`}>
                     <img
                         src={getEmotionImage()}
-                        alt="Marcel the Goat Trainer"
+                        alt={`Marcel - ${emotion}`}
                         className="w-full h-full object-cover"
                     />
                 </div>
@@ -57,12 +73,12 @@ const VirtualTrainer: React.FC = () => {
             </div>
 
             <style>{`
-                @keyframes bounce-slight {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-5px); }
+                @keyframes talk-bob {
+                    0%, 100% { transform: translateY(0) scale(1); }
+                    50% { transform: translateY(-3px) scale(1.02); }
                 }
-                .animate-bounce-slight {
-                    animation: bounce-slight 2s infinite;
+                .animate-talk-bob {
+                    animation: talk-bob 0.2s infinite;
                 }
                 .animate-fade-in-up {
                     animation: fade-in-up 0.5s ease-out;

@@ -27,44 +27,7 @@ const getRandomImage = (index: number) => {
   return `${BASE_IMG_PATH}${AVAILABLE_IMAGES[index % AVAILABLE_IMAGES.length]}`;
 };
 
-export const IMAGE_MAP = {
-  // Using specific thematic images where they fit best, otherwise cycling through available general images
-  generalInfo: [
-    `${BASE_IMG_PATH}Dining_room_1.png`, // Welcome
-    `${BASE_IMG_PATH}the-french-goat.jpg`, // Mission
-    `${BASE_IMG_PATH}storefront.jpg`, // Info
-    `${BASE_IMG_PATH}Dining_room_1.png`, // Contact
-  ],
-  sequencePages: [
-    `${BASE_IMG_PATH}Dining_room_1.png`, // 1. Hospitality
-    `${BASE_IMG_PATH}wine.jpeg`, // 2. Preparation (wine setup)
-    `${BASE_IMG_PATH}storefront.jpg`, // 3. Seating
-    `${BASE_IMG_PATH}drink1.jpg`, // 4. Beverages
-    `${BASE_IMG_PATH}food1.jpeg`, // 5. Appetizers
-    `${BASE_IMG_PATH}food2.jpeg`, // 6. Food Service
-    `${BASE_IMG_PATH}Dining_room_1.png`, // 7. Check-Back
-    `${BASE_IMG_PATH}wine2.jpeg`, // 8. After-Dinner Drinks
-    `${BASE_IMG_PATH}storefront.jpg`, // 9. Farewell
-    `${BASE_IMG_PATH}Dining_room_1.png`, // 10. Post-Service
-  ],
-  menuKnowledge: [
-    `${BASE_IMG_PATH}food3.jpeg`, // Dinner - Petite Plates
-    `${BASE_IMG_PATH}food4.jpeg`, // Dinner - Main Courses
-    `${BASE_IMG_PATH}food5.jpeg`, // Brunch - Starters & Egg
-    `${BASE_IMG_PATH}food6.jpeg`, // Brunch - Mains & Salads
-    `${BASE_IMG_PATH}food8.jpg`, // Desserts & Sides
-    `${BASE_IMG_PATH}drink1.jpg`, // Beverages
-  ],
-  wineKnowledge: [
-    `${BASE_IMG_PATH}wine.jpeg`, // Wine Philosophy
-    `${BASE_IMG_PATH}wine2.jpeg`, // French Wine Regions
-    `${BASE_IMG_PATH}drink1.jpg`, // Sparkling & Rose
-    `${BASE_IMG_PATH}wine.jpeg`, // White Wines
-    `${BASE_IMG_PATH}wine2.jpeg`, // Red Wines - Pinot Noir
-    `${BASE_IMG_PATH}wine.jpeg`, // Red Wines - Bordeaux & Other
-  ],
-  fallback: `${BASE_IMG_PATH}storefront.jpg`,
-};
+export const IMAGE_MAP = {};
 
 export const GENERAL_INFO_PAGES: InfoPage[] = [
   {
