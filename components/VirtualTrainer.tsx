@@ -3,7 +3,7 @@ import { useTrainer } from '../contexts/TrainerContext';
 import { soundService } from '../services/SoundService';
 
 const VirtualTrainer: React.FC = () => {
-    const { isVisible, message, emotion, hideTrainer, isTalking } = useTrainer();
+    const { isVisible, message, emotion, hideTrainer } = useTrainer();
     const [animateIn, setAnimateIn] = useState(false);
 
     useEffect(() => {
@@ -52,9 +52,9 @@ const VirtualTrainer: React.FC = () => {
                 </div>
             )}
 
-            {/* Avatar */}
+            {/* Avatar - Static Image as requested */}
             <div className="relative group cursor-pointer" onClick={() => hideTrainer()}>
-                <div className={`w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 transition-transform duration-300 ${isTalking ? 'animate-talk-strong' : 'animate-breathe'}`}>
+                <div className="w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 transition-transform duration-300">
                     <img
                         src={getEmotionImage()}
                         alt={`Marcel - ${emotion}`}
@@ -68,22 +68,6 @@ const VirtualTrainer: React.FC = () => {
             </div>
 
             <style>{`
-                @keyframes talk-strong {
-                    0%, 100% { transform: translateY(0) scale(1); }
-                    25% { transform: translateY(-8px) scale(1.02); }
-                    50% { transform: translateY(0) scale(0.98); }
-                    75% { transform: translateY(-4px) scale(1.01); }
-                }
-                @keyframes breathe {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.02) translateY(-2px); }
-                }
-                .animate-talk-strong {
-                    animation: talk-strong 0.4s infinite ease-in-out;
-                }
-                .animate-breathe {
-                    animation: breathe 4s infinite ease-in-out;
-                }
                 .animate-fade-in-up {
                     animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1);
                 }

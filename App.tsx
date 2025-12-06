@@ -73,15 +73,10 @@ const AppContent: React.FC = () => {
   const { showTrainer, say } = useTrainer();
 
   // Welcome message on load
+  // Welcome message logic moved to handleWelcomeDismiss to allow auto-play
   useEffect(() => {
-    if (user) {
-      const script = getRandomScript('login');
-      if (script) {
-        // Short delay to allow UI to settle
-        setTimeout(() => say(script.text, script.audio, 4000), 1000);
-      }
-    }
-  }, [user, say]);
+    // We defer the greeting until the user interacts with the Welcome Modal
+  }, []);
 
   // Training state
   const [progress, setProgress] = useState<TrainingProgress | null>(null);
@@ -92,7 +87,14 @@ const AppContent: React.FC = () => {
 
   // Welcome Overlay State
   const [showWelcome, setShowWelcome] = useState(true);
-  const handleWelcomeDismiss = () => setShowWelcome(false);
+  const handleWelcomeDismiss = () => {
+    setShowWelcome(false);
+    // Play greeting AFTER user interaction to bypass autoplay policy
+    const script = getRandomScript('login');
+    if (script) {
+      say(script.text, script.audio, 4000);
+    }
+  };
 
   // Calculate unlocked section based on progress
   const unlockedSectionIndex = progress?.currentSectionIndex ?? 0;
