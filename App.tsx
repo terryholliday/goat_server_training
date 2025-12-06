@@ -17,6 +17,7 @@ import { MenuMasterySection } from './components/MenuMasterySection';
 import { GuestScenariosSection } from './components/GuestScenariosSection';
 import { TrainerProvider, useTrainer } from './contexts/TrainerContext';
 import { TrainingCockpit } from './components/TrainingCockpit';
+import VirtualTrainer from './components/VirtualTrainer';
 import { soundService } from './services/SoundService';
 import { getRandomScript } from './data/marcelScripts';
 import {
