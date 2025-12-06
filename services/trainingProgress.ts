@@ -166,24 +166,44 @@ export async function markSectionComplete(
 export async function saveQuizScore(
     uid: string,
     quizId: string,
-    quizScores: [{
+    score: number,
+    totalQuestions: number
+): Promise<void> {
+    const progressRef = doc(db, 'progress', uid);
+    const current = await getTrainingProgress(uid);
+
+    const passed = (score / totalQuestions) >= 0.8;
+    const quizResult: QuizResult = {
+        quizId,
+        score,
+        totalQuestions,
+        passed,
+        completedAt: new Date()
+    };
+
+    if (!current) {
+        const newProgress = await initializeProgress(uid);
+        newProgress.quizScores = [quizResult];
+        await setDoc(progressRef, {
+            ...newProgress,
+            quizScores: [{
                 ...quizResult,
-        completedAt: serverTimestamp()
+                completedAt: serverTimestamp()
             }],
-    lastUpdated: serverTimestamp()
+            lastUpdated: serverTimestamp()
         });
-return;
+        return;
     }
 
-const quizScores = [...current.quizScores, quizResult];
+    const quizScores = [...current.quizScores, quizResult];
 
-await updateDoc(progressRef, {
-    quizScores: quizScores.map(q => ({
-        ...q,
-        completedAt: q.completedAt instanceof Date ? Timestamp.fromDate(q.completedAt) : q.completedAt
-    })),
-    lastUpdated: serverTimestamp()
-});
+    await updateDoc(progressRef, {
+        quizScores: quizScores.map(q => ({
+            ...q,
+            completedAt: q.completedAt instanceof Date ? Timestamp.fromDate(q.completedAt) : q.completedAt
+        })),
+        lastUpdated: serverTimestamp()
+    });
 }
 
 export async function saveFinalExamAttempt(
