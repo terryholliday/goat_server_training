@@ -20,6 +20,7 @@ import { TrainingCockpit } from './components/TrainingCockpit';
 import { MarcelWelcome } from './components/MarcelWelcome';
 import VirtualTrainer from './components/VirtualTrainer';
 import { soundService } from './services/SoundService';
+import { marcelService } from './services/MarcelService';
 import { getRandomScript } from './data/marcelScripts';
 import {
   GENERAL_INFO_QUIZ,
@@ -37,6 +38,7 @@ import {
   saveFinalExamAttempt,
 } from './services/trainingProgress';
 import type { TrainingProgress, ExamAttempt } from './types';
+import type { ChatMessageProps } from './components/ChatMessage';
 
 // Define section structure
 const SECTIONS = [
@@ -77,6 +79,44 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     // We defer the greeting until the user interacts with the Welcome Modal
   }, []);
+
+  // Chat State
+  const [chatHistory, setChatHistory] = useState<ChatMessageProps[]>([
+    { role: 'ai', content: "Bonjour! I am Marcel, your virtual maitre d'. I am here to help you master our menu and service standards." }
+  ]);
+
+  const handleSendMessage = async (message: string) => {
+    // Add user message
+    const userMsg: ChatMessageProps = { role: 'user', content: message };
+    setChatHistory(prev => [...prev, userMsg]);
+
+    // Process with Marcel
+    // Simulate thinking delay if needed, but service is async
+    try {
+      const response = await marcelService.processMessage(message);
+
+      const aiMsg: ChatMessageProps = { role: 'ai', content: response.text };
+      setChatHistory(prev => [...prev, aiMsg]);
+
+      // Make Marcel speak
+      say(response.text, undefined, 4000);
+
+      // Update emotion if needed
+      // Logic for that is in TrainerContext, we could expose setEmotion if strictly needed
+      // or just assume 'say' handles basic talking.
+      // If we want specific emotion:
+      if (response.emotion) {
+        // modifying say to accept emotion or exposed setEmotion would be ideal, 
+        // but for now say() resets to neutral.
+        // We can potentially update TrainerContext to accept emotion in say() later.
+      }
+
+    } catch (error) {
+      console.error("Marcel Error:", error);
+      const errorMsg: ChatMessageProps = { role: 'ai', content: "Pardon, something went wrong with my brain!" };
+      setChatHistory(prev => [...prev, errorMsg]);
+    }
+  };
 
   // Training state
   const [progress, setProgress] = useState<TrainingProgress | null>(null);
@@ -330,10 +370,8 @@ const AppContent: React.FC = () => {
       */}
       <TrainingCockpit
         activeArtifact={renderActiveArtifact()}
-        chatHistory={[
-          { role: 'ai', content: "Bonjour! I am Marcel, your virtual maitre d'. I am here to help you master our menu and service standards." }
-        ]}
-        onSendMessage={(msg) => say(msg, 3000)} // Simple echo for now
+        chatHistory={chatHistory}
+        onSendMessage={handleSendMessage}
         onLogout={logout}
       />
 

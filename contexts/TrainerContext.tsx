@@ -60,7 +60,7 @@ export function TrainerProvider({ children }: TrainerProviderProps) {
         setEmotion(emo);
     }, []);
 
-    const say = useCallback((msg: string, audioFile?: string, duration: number = 5000) => {
+    const say = useCallback((msg: string, audioFile?: string, _duration: number = 5000) => {
         // Reset state first to ensure clean transition
         setMessage(msg);
         setEmotion('neutral');
@@ -73,10 +73,7 @@ export function TrainerProvider({ children }: TrainerProviderProps) {
             soundService.speak(msg, audioFile, {
                 onEnded: () => {
                     setIsTalking(false);
-                    // Keep him on screen for a moment after speaking
-                    setTimeout(() => {
-                        hideTrainer();
-                    }, 1000);
+                    // Marcel stays visible - user can close with X button
                 }
             });
         } else {
@@ -88,14 +85,9 @@ export function TrainerProvider({ children }: TrainerProviderProps) {
                 setIsTalking(false);
             }, 2000);
 
-            // Auto-hide after duration
-            if (duration > 0) {
-                setTimeout(() => {
-                    hideTrainer();
-                }, duration);
-            }
+            // Marcel stays visible - user can close with X button
         }
-    }, [hideTrainer]);
+    }, []);
 
     const value = {
         isVisible,
@@ -115,3 +107,4 @@ export function TrainerProvider({ children }: TrainerProviderProps) {
         </TrainerContext.Provider>
     );
 }
+

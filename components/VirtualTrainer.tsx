@@ -42,8 +42,16 @@ const VirtualTrainer: React.FC = () => {
                 </div>
             )}
 
-            {/* Avatar - Static Image as requested */}
-            <div className="relative group cursor-pointer" onClick={() => hideTrainer()}>
+            {/* Avatar - Static Image */}
+            <div className="relative group">
+                {/* X Close Button */}
+                <button
+                    onClick={hideTrainer}
+                    className="absolute -top-2 -right-2 z-10 bg-white hover:bg-red-500 hover:text-white text-gray-500 border-2 border-gray-300 hover:border-red-500 rounded-full w-8 h-8 flex items-center justify-center shadow-lg transition-all font-bold text-lg"
+                    aria-label="Close Marcel"
+                >
+                    ✕
+                </button>
                 <div className="w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72">
                     <img
                         src={getEmotionImage()}
