@@ -5,15 +5,16 @@ export type MarcelEmotion = 'neutral' | 'happy' | 'thinking' | 'stern' | 'surpri
 interface TrainerState {
     isVisible: boolean;
     message: string | null;
+    audio: string | null;
     emotion: MarcelEmotion;
     isTalking: boolean;
 }
 
 interface TrainerContextType extends TrainerState {
-    showTrainer: (message: string, emotion?: MarcelEmotion) => void;
+    showTrainer: (message: string, emotion?: MarcelEmotion, audio?: string) => void;
     hideTrainer: () => void;
     setEmotion: (emotion: MarcelEmotion) => void;
-    say: (message: string, duration?: number) => void;
+    say: (message: string, audio?: string, duration?: number) => void;
 }
 
 const TrainerContext = createContext<TrainerContextType | undefined>(undefined);
@@ -33,12 +34,14 @@ interface TrainerProviderProps {
 export function TrainerProvider({ children }: TrainerProviderProps) {
     const [isVisible, setIsVisible] = useState(false); // Hidden by default, appears when needed or on delays
     const [message, setMessage] = useState<string | null>(null);
+    const [audio, setAudio] = useState<string | null>(null);
     const [emotion, setEmotion] = useState<MarcelEmotion>('neutral');
     const [isTalking, setIsTalking] = useState(false);
 
-    const showTrainer = useCallback((msg: string, emo: MarcelEmotion = 'neutral') => {
+    const showTrainer = useCallback((msg: string, emo: MarcelEmotion = 'neutral', audioFile?: string) => {
         setMessage(msg);
         setEmotion(emo);
+        setAudio(audioFile || null);
         setIsVisible(true);
         setIsTalking(true);
 
@@ -49,14 +52,15 @@ export function TrainerProvider({ children }: TrainerProviderProps) {
     const hideTrainer = useCallback(() => {
         setIsVisible(false);
         setMessage(null);
+        setAudio(null);
     }, []);
 
     const setTrainerEmotion = useCallback((emo: MarcelEmotion) => {
         setEmotion(emo);
     }, []);
 
-    const say = useCallback((msg: string, duration: number = 5000) => {
-        showTrainer(msg);
+    const say = useCallback((msg: string, audioFile?: string, duration: number = 5000) => {
+        showTrainer(msg, 'neutral', audioFile);
         // Auto-hide after duration if strictly informational
         if (duration > 0) {
             setTimeout(() => {
@@ -68,6 +72,7 @@ export function TrainerProvider({ children }: TrainerProviderProps) {
     const value = {
         isVisible,
         message,
+        audio,
         emotion,
         isTalking,
         showTrainer,

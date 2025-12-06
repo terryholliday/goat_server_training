@@ -75,8 +75,10 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     if (user) {
       const script = getRandomScript('login');
-      // Short delay to allow UI to settle
-      setTimeout(() => say(script.text, 4000), 1000);
+      if (script) {
+        // Short delay to allow UI to settle
+        setTimeout(() => say(script.text, script.audio, 4000), 1000);
+      }
     }
   }, [user, say]);
 
@@ -162,9 +164,11 @@ const AppContent: React.FC = () => {
         setProgress(newProgress);
         setViewingSectionIndex(null); // Return to dashboard on pass
         soundService.playSuccess();
-        say("Excellent work! You've mastered this section.", 3000, 'happy');
+        const script = getRandomScript('correct');
+        if (script) say(script.text, script.audio, 3000);
       } else {
-        say("Not quite there yet. Review the material and try again!", 3000, 'stern');
+        const script = getRandomScript('incorrect');
+        if (script) say(script.text, script.audio, 3000);
       }
     } catch (error) {
       console.error("Failed to save quiz:", error);

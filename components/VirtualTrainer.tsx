@@ -3,7 +3,7 @@ import { useTrainer } from '../contexts/TrainerContext';
 import { soundService } from '../services/SoundService';
 
 const VirtualTrainer: React.FC = () => {
-    const { isVisible, message, emotion, hideTrainer, isTalking } = useTrainer();
+    const { isVisible, message, audio, emotion, hideTrainer, isTalking } = useTrainer();
     const [animateIn, setAnimateIn] = useState(false);
     const prevMessageRef = useRef<string | null>(null);
 
@@ -20,10 +20,11 @@ const VirtualTrainer: React.FC = () => {
     useEffect(() => {
         // Speak when message changes and is not null
         if (message && message !== prevMessageRef.current && isVisible) {
-            soundService.speak(message);
+            // Note: audio can be undefined, speak handles that
+            soundService.speak(message, audio || undefined);
             prevMessageRef.current = message;
         }
-    }, [message, isVisible]);
+    }, [message, audio, isVisible]);
 
     if (!isVisible && !animateIn) return null;
 

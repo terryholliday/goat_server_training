@@ -40,25 +40,28 @@ class SoundService {
     }
 
     // Speak text using Web Speech API
-    public speak(text: string) {
+    private currentAudio: HTMLAudioElement | null = null;
+
+    // Speak text using Web Speech API or play Audio file
+    public speak(text: string, audioFile?: string) {
+        // Stop any current speech or audio
         if (this.speechSynthesis.speaking) {
             this.speechSynthesis.cancel();
         }
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        // Try to find a French voice if possible, or a good English one
-        const voices = this.speechSynthesis.getVoices();
-        const frenchVoice = voices.find(v => v.lang.includes('fr'));
-        const englishVoice = voices.find(v => v.lang.includes('en'));
-
-        if (frenchVoice) {
-            utterance.voice = frenchVoice;
-            // Slow down slightly for the accent to be clearer
-            utterance.rate = 0.9;
+        if (this.currentAudio) {
+            this.currentAudio.pause();
+            this.currentAudio = null;
         }
-        utterance.pitch = 1.0;
 
-        this.speechSynthesis.speak(utterance);
+        // If audio file is provided, play it and DO NOT use TTS
+        if (audioFile) {
+            this.currentAudio = new Audio(audioFile);
+            this.currentAudio.play().catch(e => console.error("Error playing audio file:", e));
+            return;
+        }
+
+        // If NO audio file, be silent (per user request for no mixed voices)
+        return;
     }
 }
 
