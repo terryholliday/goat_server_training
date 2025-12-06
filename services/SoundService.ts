@@ -43,33 +43,12 @@ class SoundService {
     private currentAudio: HTMLAudioElement | null = null;
 
     // Speak text using Web Speech API or play Audio file
+    // AUDIO DISABLED - Marcel is silent
     public speak(text: string, audioFile?: string, options?: { onEnded?: () => void }) {
-        // Stop any current speech or audio
-        if (this.speechSynthesis.speaking) {
-            this.speechSynthesis.cancel();
+        // Audio is disabled - call onEnded immediately so UI doesn't hang
+        if (options?.onEnded) {
+            setTimeout(() => options.onEnded!(), 100);
         }
-        if (this.currentAudio) {
-            this.currentAudio.pause();
-            this.currentAudio = null;
-        }
-
-        // If audio file is provided, play it and DO NOT use TTS
-        if (audioFile) {
-            this.currentAudio = new Audio(audioFile);
-            if (options?.onEnded) {
-                this.currentAudio.addEventListener('ended', options.onEnded);
-            }
-            this.currentAudio.play().catch(e => {
-                console.error("Error playing audio file:", e);
-                // If audio fails (e.g. autoplay blocked), manually trigger onEnded so the UI doesn't hang
-                if (options?.onEnded) {
-                    options.onEnded();
-                }
-            });
-            return;
-        }
-
-        // If NO audio file, be silent (per user request for no mixed voices)
         return;
     }
 }

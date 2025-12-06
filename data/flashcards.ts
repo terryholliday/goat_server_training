@@ -2,7 +2,7 @@
 import type { Flashcard, FlashcardDeck } from '../types/enhanced';
 import { AVAILABLE_IMAGES } from '../constants';
 
-const BASE_IMG_PATH = "/french_goat_images/";
+const BASE_IMG_PATH = "/";
 
 // Helper to get image path
 const getImg = (name: string) => `${BASE_IMG_PATH}${name}`;

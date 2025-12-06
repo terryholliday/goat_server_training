@@ -20,7 +20,7 @@ export const AVAILABLE_IMAGES = [
   "wine2.jpeg"
 ];
 
-const BASE_IMG_PATH = "/french_goat_images/";
+const BASE_IMG_PATH = "/";
 
 // Helper to get a random image that isn't null/undefined
 const getRandomImage = (index: number) => {
