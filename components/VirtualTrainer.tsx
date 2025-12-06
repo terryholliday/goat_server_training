@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTrainer } from '../contexts/TrainerContext';
+import { soundService } from '../services/SoundService';
 
 const VirtualTrainer: React.FC = () => {
     const { isVisible, message, emotion, hideTrainer, isTalking } = useTrainer();
