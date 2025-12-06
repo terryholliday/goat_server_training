@@ -1,25 +1,42 @@
-import {
-    doc,
-    getDoc,
-    setDoc,
-    updateDoc,
-    collection,
-    getDocs,
-    serverTimestamp,
-    Timestamp,
-    query,
-    orderBy
-} from 'firebase/firestore';
-import { db } from '../firebase';
 import type { TrainingProgress, QuizResult, ExamAttempt, UserProfile } from '../types';
 
-// Helper to convert Firestore Timestamps to Dates
-const convertTimestamp = (timestamp: Timestamp | Date | null): Date => {
-    if (timestamp instanceof Timestamp) {
-        return timestamp.toDate();
+// Demo mode flag - uses localStorage instead of Firestore
+const DEMO_MODE = true;
+
+// ================== localStorage Helpers ==================
+
+function getFromStorage<T>(key: string, defaultValue: T): T {
+    if (typeof window === 'undefined') return defaultValue;
+    const stored = localStorage.getItem(key);
+    if (!stored) return defaultValue;
+    try {
+        const parsed = JSON.parse(stored);
+        // Convert date strings back to Date objects
+        if (parsed.lastUpdated) parsed.lastUpdated = new Date(parsed.lastUpdated);
+        if (parsed.createdAt) parsed.createdAt = new Date(parsed.createdAt);
+        if (parsed.lastActive) parsed.lastActive = new Date(parsed.lastActive);
+        if (parsed.quizScores) {
+            parsed.quizScores = parsed.quizScores.map((q: QuizResult) => ({
+                ...q,
+                completedAt: new Date(q.completedAt)
+            }));
+        }
+        if (parsed.finalExamAttempts) {
+            parsed.finalExamAttempts = parsed.finalExamAttempts.map((e: ExamAttempt) => ({
+                ...e,
+                completedAt: new Date(e.completedAt)
+            }));
+        }
+        return parsed;
+    } catch {
+        return defaultValue;
     }
-    return timestamp || new Date();
-};
+}
+
+function saveToStorage<T>(key: string, value: T): void {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(key, JSON.stringify(value));
+}
 
 // ================== User Profile ==================
 
@@ -29,9 +46,7 @@ export async function createUserProfile(
     displayName: string,
     role: 'staff' | 'manager' = 'staff'
 ): Promise<UserProfile> {
-    const userRef = doc(db, 'users', uid);
     const now = new Date();
-
     const profile: UserProfile = {
         uid,
         email,
@@ -41,71 +56,46 @@ export async function createUserProfile(
         lastActive: now
     };
 
-    await setDoc(userRef, {
-        ...profile,
-        createdAt: serverTimestamp(),
-        lastActive: serverTimestamp()
-    });
+    if (DEMO_MODE) {
+        saveToStorage(`user_${uid}`, profile);
+        return profile;
+    }
 
+    // Firebase version would go here
     return profile;
 }
 
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
-    const userRef = doc(db, 'users', uid);
-    const snapshot = await getDoc(userRef);
-
-    if (!snapshot.exists()) {
-        return null;
+    if (DEMO_MODE) {
+        return getFromStorage<UserProfile | null>(`user_${uid}`, null);
     }
-
-    const data = snapshot.data();
-    return {
-        uid: data.uid,
-        email: data.email,
-        displayName: data.displayName,
-        role: data.role,
-        createdAt: convertTimestamp(data.createdAt),
-        lastActive: convertTimestamp(data.lastActive)
-    };
+    // Firebase version would go here
+    return null;
 }
 
 export async function updateLastActive(uid: string): Promise<void> {
-    const userRef = doc(db, 'users', uid);
-    await updateDoc(userRef, {
-        lastActive: serverTimestamp()
-    });
+    if (DEMO_MODE) {
+        const profile = await getUserProfile(uid);
+        if (profile) {
+            profile.lastActive = new Date();
+            saveToStorage(`user_${uid}`, profile);
+        }
+        return;
+    }
+    // Firebase version would go here
 }
 
 // ================== Training Progress ==================
 
 export async function getTrainingProgress(uid: string): Promise<TrainingProgress | null> {
-    const progressRef = doc(db, 'progress', uid);
-    const snapshot = await getDoc(progressRef);
-
-    if (!snapshot.exists()) {
-        return null;
+    if (DEMO_MODE) {
+        return getFromStorage<TrainingProgress | null>(`progress_${uid}`, null);
     }
-
-    const data = snapshot.data();
-    return {
-        userId: uid,
-        completedSections: data.completedSections || [],
-        quizScores: (data.quizScores || []).map((q: Record<string, unknown>) => ({
-            ...q,
-            completedAt: convertTimestamp(q.completedAt as Timestamp | Date)
-        })),
-        finalExamAttempts: (data.finalExamAttempts || []).map((e: Record<string, unknown>) => ({
-            ...e,
-            completedAt: convertTimestamp(e.completedAt as Timestamp | Date)
-        })),
-        currentSectionIndex: data.currentSectionIndex || 0,
-        lastUpdated: convertTimestamp(data.lastUpdated)
-    };
+    // Firebase version would go here
+    return null;
 }
 
 export async function initializeProgress(uid: string): Promise<TrainingProgress> {
-    const progressRef = doc(db, 'progress', uid);
-
     const initialProgress: TrainingProgress = {
         userId: uid,
         completedSections: [],
@@ -115,11 +105,12 @@ export async function initializeProgress(uid: string): Promise<TrainingProgress>
         lastUpdated: new Date()
     };
 
-    await setDoc(progressRef, {
-        ...initialProgress,
-        lastUpdated: serverTimestamp()
-    });
+    if (DEMO_MODE) {
+        saveToStorage(`progress_${uid}`, initialProgress);
+        return initialProgress;
+    }
 
+    // Firebase version would go here
     return initialProgress;
 }
 
@@ -128,20 +119,10 @@ export async function markSectionComplete(
     sectionIndex: number,
     shouldUnlockNext: boolean = true
 ): Promise<TrainingProgress> {
-    const progressRef = doc(db, 'progress', uid);
-    const current = await getTrainingProgress(uid);
+    let current = await getTrainingProgress(uid);
 
     if (!current) {
-        const newProgress = await initializeProgress(uid);
-        newProgress.completedSections = [sectionIndex];
-        if (shouldUnlockNext) {
-            newProgress.currentSectionIndex = sectionIndex + 1;
-        }
-        await setDoc(progressRef, {
-            ...newProgress,
-            lastUpdated: serverTimestamp()
-        });
-        return newProgress;
+        current = await initializeProgress(uid);
     }
 
     const completedSections = [...new Set([...current.completedSections, sectionIndex])];
@@ -149,18 +130,18 @@ export async function markSectionComplete(
         ? Math.max(current.currentSectionIndex, sectionIndex + 1)
         : current.currentSectionIndex;
 
-    await updateDoc(progressRef, {
-        completedSections,
-        currentSectionIndex,
-        lastUpdated: serverTimestamp()
-    });
-
-    return {
+    const updatedProgress: TrainingProgress = {
         ...current,
         completedSections,
         currentSectionIndex,
         lastUpdated: new Date()
     };
+
+    if (DEMO_MODE) {
+        saveToStorage(`progress_${uid}`, updatedProgress);
+    }
+
+    return updatedProgress;
 }
 
 export async function saveQuizScore(
@@ -169,8 +150,11 @@ export async function saveQuizScore(
     score: number,
     totalQuestions: number
 ): Promise<void> {
-    const progressRef = doc(db, 'progress', uid);
-    const current = await getTrainingProgress(uid);
+    let current = await getTrainingProgress(uid);
+
+    if (!current) {
+        current = await initializeProgress(uid);
+    }
 
     const passed = (score / totalQuestions) >= 0.8;
     const quizResult: QuizResult = {
@@ -181,29 +165,16 @@ export async function saveQuizScore(
         completedAt: new Date()
     };
 
-    if (!current) {
-        const newProgress = await initializeProgress(uid);
-        newProgress.quizScores = [quizResult];
-        await setDoc(progressRef, {
-            ...newProgress,
-            quizScores: [{
-                ...quizResult,
-                completedAt: serverTimestamp()
-            }],
-            lastUpdated: serverTimestamp()
-        });
-        return;
-    }
-
     const quizScores = [...current.quizScores, quizResult];
+    const updatedProgress: TrainingProgress = {
+        ...current,
+        quizScores,
+        lastUpdated: new Date()
+    };
 
-    await updateDoc(progressRef, {
-        quizScores: quizScores.map(q => ({
-            ...q,
-            completedAt: q.completedAt instanceof Date ? Timestamp.fromDate(q.completedAt) : q.completedAt
-        })),
-        lastUpdated: serverTimestamp()
-    });
+    if (DEMO_MODE) {
+        saveToStorage(`progress_${uid}`, updatedProgress);
+    }
 }
 
 export async function saveFinalExamAttempt(
@@ -212,10 +183,13 @@ export async function saveFinalExamAttempt(
     totalQuestions: number,
     passed: boolean
 ): Promise<number> {
-    const progressRef = doc(db, 'progress', uid);
-    const current = await getTrainingProgress(uid);
+    let current = await getTrainingProgress(uid);
 
-    const attemptNumber = current ? current.finalExamAttempts.length + 1 : 1;
+    if (!current) {
+        current = await initializeProgress(uid);
+    }
+
+    const attemptNumber = current.finalExamAttempts.length + 1;
 
     const examAttempt: ExamAttempt = {
         score,
@@ -225,29 +199,16 @@ export async function saveFinalExamAttempt(
         completedAt: new Date()
     };
 
-    if (!current) {
-        const newProgress = await initializeProgress(uid);
-        newProgress.finalExamAttempts = [examAttempt];
-        await setDoc(progressRef, {
-            ...newProgress,
-            finalExamAttempts: [{
-                ...examAttempt,
-                completedAt: serverTimestamp()
-            }],
-            lastUpdated: serverTimestamp()
-        });
-        return attemptNumber;
-    }
-
     const finalExamAttempts = [...current.finalExamAttempts, examAttempt];
+    const updatedProgress: TrainingProgress = {
+        ...current,
+        finalExamAttempts,
+        lastUpdated: new Date()
+    };
 
-    await updateDoc(progressRef, {
-        finalExamAttempts: finalExamAttempts.map(e => ({
-            ...e,
-            completedAt: e.completedAt instanceof Date ? Timestamp.fromDate(e.completedAt) : e.completedAt
-        })),
-        lastUpdated: serverTimestamp()
-    });
+    if (DEMO_MODE) {
+        saveToStorage(`progress_${uid}`, updatedProgress);
+    }
 
     return attemptNumber;
 }
@@ -263,59 +224,26 @@ export interface StaffProgressSummary {
 }
 
 export async function getAllStaffProgress(totalSections: number): Promise<StaffProgressSummary[]> {
-    const usersRef = collection(db, 'users');
-    const usersQuery = query(usersRef, orderBy('displayName'));
-    const usersSnapshot = await getDocs(usersQuery);
-
-    const staffProgress: StaffProgressSummary[] = [];
-
-    for (const userDoc of usersSnapshot.docs) {
-        const userData = userDoc.data();
-
-        // Only include staff members, not managers
-        if (userData.role === 'manager') continue;
-
-        const user: UserProfile = {
-            uid: userData.uid || userDoc.id,
-            email: userData.email,
-            displayName: userData.displayName,
-            role: userData.role,
-            createdAt: convertTimestamp(userData.createdAt),
-            lastActive: convertTimestamp(userData.lastActive)
-        };
-
-        const progress = await getTrainingProgress(user.uid);
-
-        const completedCount = progress?.completedSections.length || 0;
-        const completionPercentage = Math.round((completedCount / totalSections) * 100);
-
-        const finalExamPassed = progress?.finalExamAttempts.some(e => e.passed) || false;
-
-        const lastQuiz = progress?.quizScores[progress.quizScores.length - 1];
-        const lastQuizScore = lastQuiz
-            ? Math.round((lastQuiz.score / lastQuiz.totalQuestions) * 100)
-            : null;
-
-        staffProgress.push({
-            user,
-            progress,
-            completionPercentage,
-            finalExamPassed,
-            lastQuizScore
-        });
+    if (DEMO_MODE) {
+        // In demo mode, just return empty array (no staff to manage)
+        return [];
     }
-
-    return staffProgress;
+    // Firebase version would go here
+    return [];
 }
 
 export async function resetStaffProgress(uid: string): Promise<void> {
-    const progressRef = doc(db, 'progress', uid);
-    await setDoc(progressRef, {
-        userId: uid,
-        completedSections: [],
-        quizScores: [],
-        finalExamAttempts: [],
-        currentSectionIndex: 0,
-        lastUpdated: serverTimestamp()
-    });
+    if (DEMO_MODE) {
+        const resetProgress: TrainingProgress = {
+            userId: uid,
+            completedSections: [],
+            quizScores: [],
+            finalExamAttempts: [],
+            currentSectionIndex: 0,
+            lastUpdated: new Date()
+        };
+        saveToStorage(`progress_${uid}`, resetProgress);
+        return;
+    }
+    // Firebase version would go here
 }

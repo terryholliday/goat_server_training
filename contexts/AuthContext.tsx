@@ -1,18 +1,36 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import {
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-    updateProfile,
-    type User
-} from 'firebase/auth';
-import { auth } from '../firebase';
-import { createUserProfile, getUserProfile, updateLastActive } from '../services/trainingProgress';
 import type { UserProfile, UserRole } from '../types';
 
+// Demo mode flag - set to true to bypass Firebase auth
+const DEMO_MODE = true;
+
+// Mock user for demo mode
+const DEMO_USER = {
+    uid: 'demo-user-001',
+    email: 'demo@thefrenchgoat.com',
+    displayName: 'Demo Staff',
+    emailVerified: true,
+};
+
+const DEMO_PROFILE: UserProfile = {
+    uid: 'demo-user-001',
+    email: 'demo@thefrenchgoat.com',
+    displayName: 'Demo Staff',
+    role: 'staff' as UserRole,
+    createdAt: new Date(),
+    lastActive: new Date(),
+};
+
+// Minimal User type for demo mode (matches Firebase User interface we need)
+interface DemoUser {
+    uid: string;
+    email: string | null;
+    displayName: string | null;
+    emailVerified: boolean;
+}
+
 interface AuthContextType {
-    user: User | null;
+    user: DemoUser | null;
     userProfile: UserProfile | null;
     loading: boolean;
     error: string | null;
@@ -37,61 +55,38 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<DemoUser | null>(null);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Listen for auth state changes
+    // Initialize - auto-login in demo mode
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            setUser(firebaseUser);
-
-            if (firebaseUser) {
-                try {
-                    // Fetch user profile from Firestore
-                    const profile = await getUserProfile(firebaseUser.uid);
-                    setUserProfile(profile);
-
-                    // Update last active timestamp
-                    if (profile) {
-                        await updateLastActive(firebaseUser.uid);
-                    }
-                } catch (err) {
-                    console.error('Error fetching user profile:', err);
-                }
-            } else {
-                setUserProfile(null);
-            }
-
+        if (DEMO_MODE) {
+            // Auto-login with demo user
+            setUser(DEMO_USER);
+            setUserProfile(DEMO_PROFILE);
             setLoading(false);
-        });
-
-        return () => unsubscribe();
+        } else {
+            // Firebase auth would go here
+            setLoading(false);
+        }
     }, []);
 
     const login = useCallback(async (email: string, password: string): Promise<void> => {
         setError(null);
         setLoading(true);
 
-        try {
-            const credential = await signInWithEmailAndPassword(auth, email, password);
-
-            // Fetch and set user profile
-            const profile = await getUserProfile(credential.user.uid);
-            setUserProfile(profile);
-
-            // Update last active
-            if (profile) {
-                await updateLastActive(credential.user.uid);
-            }
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Failed to login';
-            setError(getReadableErrorMessage(errorMessage));
-            throw err;
-        } finally {
+        if (DEMO_MODE) {
+            // Demo mode - accept any login
+            setUser({ ...DEMO_USER, email });
+            setUserProfile({ ...DEMO_PROFILE, email });
             setLoading(false);
+            return;
         }
+
+        // Firebase auth would go here
+        setLoading(false);
     }, []);
 
     const signup = useCallback(async (
@@ -103,39 +98,28 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
         setError(null);
         setLoading(true);
 
-        try {
-            const credential = await createUserWithEmailAndPassword(auth, email, password);
-
-            // Update Firebase Auth profile
-            await updateProfile(credential.user, { displayName });
-
-            // Create user profile in Firestore
-            const profile = await createUserProfile(
-                credential.user.uid,
-                email,
-                displayName,
-                role
-            );
-            setUserProfile(profile);
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Failed to create account';
-            setError(getReadableErrorMessage(errorMessage));
-            throw err;
-        } finally {
+        if (DEMO_MODE) {
+            // Demo mode - accept any signup
+            setUser({ ...DEMO_USER, email, displayName });
+            setUserProfile({ ...DEMO_PROFILE, email, displayName, role });
             setLoading(false);
+            return;
         }
+
+        // Firebase auth would go here
+        setLoading(false);
     }, []);
 
     const logout = useCallback(async (): Promise<void> => {
         setError(null);
-        try {
-            await signOut(auth);
-            setUserProfile(null);
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Failed to logout';
-            setError(errorMessage);
-            throw err;
+        if (DEMO_MODE) {
+            // In demo mode, just re-login immediately
+            setUser(DEMO_USER);
+            setUserProfile(DEMO_PROFILE);
+            return;
         }
+        setUser(null);
+        setUserProfile(null);
     }, []);
 
     const clearError = useCallback(() => {
@@ -158,27 +142,4 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
             {children}
         </AuthContext.Provider>
     );
-}
-
-// Helper function to convert Firebase error codes to readable messages
-function getReadableErrorMessage(error: string): string {
-    if (error.includes('auth/email-already-in-use')) {
-        return 'An account with this email already exists.';
-    }
-    if (error.includes('auth/invalid-email')) {
-        return 'Please enter a valid email address.';
-    }
-    if (error.includes('auth/weak-password')) {
-        return 'Password should be at least 6 characters.';
-    }
-    if (error.includes('auth/user-not-found') || error.includes('auth/wrong-password')) {
-        return 'Invalid email or password.';
-    }
-    if (error.includes('auth/too-many-requests')) {
-        return 'Too many failed attempts. Please try again later.';
-    }
-    if (error.includes('auth/invalid-credential')) {
-        return 'Invalid email or password.';
-    }
-    return error;
 }
