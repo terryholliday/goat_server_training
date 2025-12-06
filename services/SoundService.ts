@@ -59,7 +59,13 @@ class SoundService {
             if (options?.onEnded) {
                 this.currentAudio.addEventListener('ended', options.onEnded);
             }
-            this.currentAudio.play().catch(e => console.error("Error playing audio file:", e));
+            this.currentAudio.play().catch(e => {
+                console.error("Error playing audio file:", e);
+                // If audio fails (e.g. autoplay blocked), manually trigger onEnded so the UI doesn't hang
+                if (options?.onEnded) {
+                    options.onEnded();
+                }
+            });
             return;
         }
 

@@ -54,7 +54,7 @@ const VirtualTrainer: React.FC = () => {
 
             {/* Avatar - Static Image as requested */}
             <div className="relative group cursor-pointer" onClick={() => hideTrainer()}>
-                <div className="w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 transition-transform duration-300">
+                <div className="w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72">
                     <img
                         src={getEmotionImage()}
                         alt={`Marcel - ${emotion}`}
