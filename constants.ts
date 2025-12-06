@@ -27,7 +27,37 @@ const getRandomImage = (index: number) => {
   return `${BASE_IMG_PATH}${AVAILABLE_IMAGES[index % AVAILABLE_IMAGES.length]}`;
 };
 
-export const IMAGE_MAP = {};
+// Image Categories populated from AVAILABLE_IMAGES
+export const IMAGE_MAP = {
+  generalInfo: [
+    `${BASE_IMG_PATH}Dining_room_1.png`,
+    `${BASE_IMG_PATH}food1.jpeg`,
+    `${BASE_IMG_PATH}food2.jpeg`,
+    `${BASE_IMG_PATH}food3.jpeg`
+  ],
+  sequencePages: [
+    `${BASE_IMG_PATH}Dining_room_1.png`,
+    `${BASE_IMG_PATH}food4.jpeg`,
+    `${BASE_IMG_PATH}wine.jpeg`,
+    `${BASE_IMG_PATH}drink1.jpg`,
+    `${BASE_IMG_PATH}food5.jpeg`,
+    `${BASE_IMG_PATH}food6.jpeg`,
+    `${BASE_IMG_PATH}food7.jpeg`, // Index 6 used in FineDiningSection
+    `${BASE_IMG_PATH}food8.jpg`
+  ],
+  menuKnowledge: [
+    `${BASE_IMG_PATH}food9.jpg`,
+    `${BASE_IMG_PATH}food1.jpeg`,
+    `${BASE_IMG_PATH}food2.jpeg`,
+    `${BASE_IMG_PATH}food3.jpeg`
+  ],
+  wineKnowledge: [
+    `${BASE_IMG_PATH}wine.jpeg`,
+    `${BASE_IMG_PATH}wine2.jpeg`,
+    `${BASE_IMG_PATH}drink1.jpg`
+  ],
+  fallback: `${BASE_IMG_PATH}logo.png`, // Fallback
+};
 
 export const GENERAL_INFO_PAGES: InfoPage[] = [
   {
