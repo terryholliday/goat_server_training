@@ -30,9 +30,18 @@ const FlashcardCard: React.FC<FlashcardProps> = ({ card, isFlipped, onFlip }) =>
             >
                 {/* Front of card */}
                 <div
-                    className="absolute w-full h-full bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl shadow-lg border-2 border-amber-200 p-6 flex flex-col items-center justify-center"
+                    className="absolute w-full h-full bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl shadow-lg border-2 border-amber-200 p-6 flex flex-col items-center justify-center overflow-hidden"
                     style={{ backfaceVisibility: 'hidden' }}
                 >
+                    {card.front.image && (
+                        <div className="w-full h-32 mb-4 overflow-hidden rounded-lg">
+                            <img
+                                src={card.front.image}
+                                alt={card.front.title}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    )}
                     <div className="text-center">
                         <h3 className="text-2xl font-bold text-amber-900 mb-2">{card.front.title}</h3>
                         {card.front.subtitle && (

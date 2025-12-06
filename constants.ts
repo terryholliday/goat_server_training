@@ -1,41 +1,69 @@
 import type { Wine, MenuItem, InfoPage, SequenceStep, Term, MCQ } from './types';
 
+// Available images in public/french_goat_images (excluding Marcel)
+export const AVAILABLE_IMAGES = [
+  "10_seven_year_anniversary_celebration.jpeg",
+  "Dining_room_1.png",
+  "drink1.jpg",
+  "food1.jpeg",
+  "food2.jpeg",
+  "food3.jpeg",
+  "food4.jpeg",
+  "food5.jpeg",
+  "food6.jpeg",
+  "food7.jpeg",
+  "food8.jpg",
+  "food9.jpg",
+  "storefront.jpg",
+  "the-french-goat.jpg",
+  "wine.jpeg",
+  "wine2.jpeg"
+];
+
+const BASE_IMG_PATH = "/french_goat_images/";
+
+// Helper to get a random image that isn't null/undefined
+const getRandomImage = (index: number) => {
+  return `${BASE_IMG_PATH}${AVAILABLE_IMAGES[index % AVAILABLE_IMAGES.length]}`;
+};
+
 export const IMAGE_MAP = {
+  // Using specific thematic images where they fit best, otherwise cycling through available general images
   generalInfo: [
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // Welcome (Dining Room)
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // Mission (Dining Room)
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // Info (Dining Room)
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // Contact (Dining Room)
+    `${BASE_IMG_PATH}Dining_room_1.png`, // Welcome
+    `${BASE_IMG_PATH}the-french-goat.jpg`, // Mission
+    `${BASE_IMG_PATH}storefront.jpg`, // Info
+    `${BASE_IMG_PATH}Dining_room_1.png`, // Contact
   ],
   sequencePages: [
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // 1. Hospitality
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // 2. Preparation
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // 3. Seating
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // 4. Beverages
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/7b7d7213-9a3d-4c3e-8621-e0f3404c085b", // 5. Appetizers
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/970868f0-1090-4131-b924-118006e89cd3", // 6. Food Service
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // 7. Check-Back
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // 8. After-Dinner Drinks
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // 9. Farewell
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/15235ac9-f628-444f-b67f-c02dc215c290", // 10. Post-Service
+    `${BASE_IMG_PATH}Dining_room_1.png`, // 1. Hospitality
+    `${BASE_IMG_PATH}wine.jpeg`, // 2. Preparation (wine setup)
+    `${BASE_IMG_PATH}storefront.jpg`, // 3. Seating
+    `${BASE_IMG_PATH}drink1.jpg`, // 4. Beverages
+    `${BASE_IMG_PATH}food1.jpeg`, // 5. Appetizers
+    `${BASE_IMG_PATH}food2.jpeg`, // 6. Food Service
+    `${BASE_IMG_PATH}Dining_room_1.png`, // 7. Check-Back
+    `${BASE_IMG_PATH}wine2.jpeg`, // 8. After-Dinner Drinks
+    `${BASE_IMG_PATH}storefront.jpg`, // 9. Farewell
+    `${BASE_IMG_PATH}Dining_room_1.png`, // 10. Post-Service
   ],
   menuKnowledge: [
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/7b7d7213-9a3d-4c3e-8621-e0f3404c085b", // Dinner - Petite Plates
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/970868f0-1090-4131-b924-118006e89cd3", // Dinner - Main Courses
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/7b7d7213-9a3d-4c3e-8621-e0f3404c085b", // Brunch - Starters & Egg
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/970868f0-1090-4131-b924-118006e89cd3", // Brunch - Mains & Salads
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/d9492160-c3d3-4911-b75d-639a60e0d5d5", // Desserts & Sides
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // Beverages
+    `${BASE_IMG_PATH}food3.jpeg`, // Dinner - Petite Plates
+    `${BASE_IMG_PATH}food4.jpeg`, // Dinner - Main Courses
+    `${BASE_IMG_PATH}food5.jpeg`, // Brunch - Starters & Egg
+    `${BASE_IMG_PATH}food6.jpeg`, // Brunch - Mains & Salads
+    `${BASE_IMG_PATH}food8.jpg`, // Desserts & Sides
+    `${BASE_IMG_PATH}drink1.jpg`, // Beverages
   ],
   wineKnowledge: [
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // Wine Philosophy
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // French Wine Regions
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // Sparkling & Rose
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // White Wines
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // Red Wines - Pinot Noir
-    "https://storage.googleapis.com/user-assets.aistudio.google.com/f045b85e-f55a-464a-ad1b-1a0701b7e416", // Red Wines - Bordeaux & Other
+    `${BASE_IMG_PATH}wine.jpeg`, // Wine Philosophy
+    `${BASE_IMG_PATH}wine2.jpeg`, // French Wine Regions
+    `${BASE_IMG_PATH}drink1.jpg`, // Sparkling & Rose
+    `${BASE_IMG_PATH}wine.jpeg`, // White Wines
+    `${BASE_IMG_PATH}wine2.jpeg`, // Red Wines - Pinot Noir
+    `${BASE_IMG_PATH}wine.jpeg`, // Red Wines - Bordeaux & Other
   ],
-  fallback: "https://storage.googleapis.com/user-assets.aistudio.google.com/a823b160-2580-48e0-a7d1-e6c1a85c7c13",
+  fallback: `${BASE_IMG_PATH}storefront.jpg`,
 };
 
 export const GENERAL_INFO_PAGES: InfoPage[] = [

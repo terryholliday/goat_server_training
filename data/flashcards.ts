@@ -1,5 +1,11 @@
 // Flashcard Data for The French Goat Training System
 import type { Flashcard, FlashcardDeck } from '../types/enhanced';
+import { AVAILABLE_IMAGES } from '../constants';
+
+const BASE_IMG_PATH = "/french_goat_images/";
+
+// Helper to get image path
+const getImg = (name: string) => `${BASE_IMG_PATH}${name}`;
 
 // MENU ITEM FLASHCARDS
 export const MENU_FLASHCARDS: Flashcard[] = [
@@ -75,7 +81,7 @@ export const MENU_FLASHCARDS: Flashcard[] = [
     },
     {
         id: 'fc-spring-salad', category: 'menu',
-        front: { title: 'Spring Greens Salad', subtitle: '$12 • Vegan & GF' },
+        front: { title: 'House Green Salad', subtitle: '$12 • Vegan & GF' },
         back: {
             mainContent: 'Artisan greens, radish, golden beet, rainbow carrot, cucumber, sunflower seeds, dijon vinaigrette.',
             bulletPoints: ['No allergens', 'Pair: Fleurs de Prairie Rosé']
@@ -104,7 +110,7 @@ export const MENU_FLASHCARDS: Flashcard[] = [
     },
     {
         id: 'fc-burger', category: 'menu',
-        front: { title: 'French Goat Burger', subtitle: '$22/$19 • SIGNATURE' },
+        front: { title: 'French Goat Burger', subtitle: '$22/$21 • SIGNATURE' },
         back: {
             mainContent: 'Short rib & tenderloin blend, sharp cheddar, crispy pork belly, tomato jam, french onion mayo, asiago bun, truffle fries.',
             bulletPoints: ['Allergens: Gluten, Dairy, Eggs', 'Lettuce wrap for GF', 'Pair: DAOU Cabernet or Devil\'s Anse IPA'],
@@ -191,6 +197,64 @@ export const MENU_FLASHCARDS: Flashcard[] = [
             bulletPoints: ['Allergens: Dairy, Eggs', 'GF', 'Pair: Espresso']
         },
         difficulty: 'easy', tags: ['dessert']
+    },
+    {
+        id: 'fc-nicoise', category: 'menu',
+        front: { title: 'Tuna Niçoise', subtitle: '$33 • Main' },
+        back: {
+            mainContent: 'Seared ahi tuna, haricot verts, egg, fingerlings, olives, baby greens.',
+            pronunciation: 'nee-SWAHZ',
+            bulletPoints: ['Allergens: Fish, Eggs', 'GF', 'Pair: Fleurs de Prairie Rosé']
+        },
+        difficulty: 'medium', tags: ['salad', 'dinner-only']
+    },
+    {
+        id: 'fc-florentine', category: 'menu',
+        front: { title: 'Baked Eggs Florentine', subtitle: '$17 • Brunch' },
+        back: {
+            mainContent: 'Sautéed spinach, poached eggs, sauce mornay, parmesan.',
+            bulletPoints: ['Allergens: Eggs, Dairy', 'Vegetarian', 'Pair: Mimosa']
+        },
+        difficulty: 'medium', tags: ['brunch', 'eggs']
+    },
+    {
+        id: 'fc-quiche', category: 'menu',
+        front: { title: 'House Quiche', subtitle: '$14 • Brunch' },
+        back: {
+            mainContent: 'Quiche of the day with buttery crust and seasonal fillings.',
+            pronunciation: 'KEESH',
+            bulletPoints: ['Allergens: Eggs, Dairy, Gluten', 'Changes Daily']
+        },
+        difficulty: 'easy', tags: ['brunch', 'eggs']
+    },
+    {
+        id: 'fc-steak-eggs', category: 'menu',
+        front: { title: 'Steak and Eggs', subtitle: '$24 • Brunch' },
+        back: {
+            mainContent: 'Chargrilled coulotte sirloin, sunny side eggs, sweet potato hash.',
+            bulletPoints: ['Allergens: Eggs', 'GF', 'Pair: Bloody Mary']
+        },
+        difficulty: 'medium', tags: ['brunch', 'steak']
+    },
+    {
+        id: 'fc-sorbet', category: 'menu',
+        front: { title: 'Sorbet', subtitle: '$9 • Dessert' },
+        back: {
+            mainContent: 'House-made seasonal sorbet. Dairy-free.',
+            pronunciation: 'sor-BAY',
+            bulletPoints: ['Vegan', 'GF', 'Changes Daily']
+        },
+        difficulty: 'easy', tags: ['dessert', 'vegan']
+    },
+    {
+        id: 'fc-gelato', category: 'menu',
+        front: { title: 'Gelato', subtitle: '$9 • Dessert' },
+        back: {
+            mainContent: 'House-made Italian-style ice cream. Denser and creamier.',
+            pronunciation: 'jeh-LAH-toh',
+            bulletPoints: ['Allergens: Dairy', 'GF', 'Changes Daily']
+        },
+        difficulty: 'easy', tags: ['dessert']
     }
 ];
 
@@ -212,20 +276,20 @@ export const WINE_FLASHCARDS: Flashcard[] = [
 
 // CULINARY TERMS FLASHCARDS
 export const CULINARY_TERMS_FLASHCARDS: Flashcard[] = [
-    { id: 'fc-term-confit', category: 'term', front: { title: 'Confit', subtitle: 'Technique' }, back: { mainContent: 'Slow poaching in fat at low temp.', pronunciation: 'kon-FEE', bulletPoints: ['Used: Duck Leg Confit'] }, difficulty: 'medium', tags: ['technique'] },
-    { id: 'fc-term-veloute', category: 'term', front: { title: 'Velouté', subtitle: 'Mother Sauce' }, back: { mainContent: 'Stock-based sauce thickened with roux.', pronunciation: 'veh-loo-TAY', bulletPoints: ['Used: Chicken, Salmon'] }, difficulty: 'medium', tags: ['sauce'] },
-    { id: 'fc-term-mornay', category: 'term', front: { title: 'Mornay', subtitle: 'Sauce' }, back: { mainContent: 'Béchamel + gruyère cheese.', pronunciation: 'mor-NAY', bulletPoints: ['Used: Croque Madame'] }, difficulty: 'medium', tags: ['sauce'] },
-    { id: 'fc-term-hollandaise', category: 'term', front: { title: 'Hollandaise', subtitle: 'Mother Sauce' }, back: { mainContent: 'Egg yolk + butter + lemon emulsion.', pronunciation: 'hol-un-DAYZ', bulletPoints: ['Used: Eggs Benedict'] }, difficulty: 'easy', tags: ['sauce'] },
-    { id: 'fc-term-coulis', category: 'term', front: { title: 'Coulis', subtitle: 'Sauce' }, back: { mainContent: 'Puréed/strained vegetable or fruit sauce.', pronunciation: 'koo-LEE', bulletPoints: ['Used: Duck (carrot-lemongrass)'] }, difficulty: 'medium', tags: ['sauce'] },
-    { id: 'fc-term-pave', category: 'term', front: { title: 'Pavé', subtitle: 'Term' }, back: { mainContent: '"Cobblestone" - layered, pressed, sliced.', pronunciation: 'pah-VAY', bulletPoints: ['Used: Salmon (potato pavé)'] }, difficulty: 'hard', tags: ['technique'] },
-    { id: 'fc-term-fondant', category: 'term', front: { title: 'Fondant Potatoes', subtitle: 'Side' }, back: { mainContent: 'Seared, then braised in butter/stock.', pronunciation: 'fon-DAHN', bulletPoints: ['Crispy outside, creamy inside'] }, difficulty: 'medium', tags: ['potato'] },
-    { id: 'fc-term-ragout', category: 'term', front: { title: 'Ragoût', subtitle: 'Stew' }, back: { mainContent: 'Slow-cooked vegetable/meat stew.', pronunciation: 'ra-GOO', bulletPoints: ['Used: Chicken (mushroom)'] }, difficulty: 'easy', tags: ['technique'] },
-    { id: 'fc-term-frisee', category: 'term', front: { title: 'Frisée', subtitle: 'Green' }, back: { mainContent: 'Curly baby endive. Slightly bitter.', pronunciation: 'free-ZAY', bulletPoints: ['Used: Lyonnaise, Duck'] }, difficulty: 'easy', tags: ['ingredient'] },
-    { id: 'fc-term-lardons', category: 'term', front: { title: 'Lardons', subtitle: 'Bacon' }, back: { mainContent: 'Small bacon/pork belly strips.', pronunciation: 'lar-DOHN', bulletPoints: ['Used: Salade Lyonnaise'] }, difficulty: 'easy', tags: ['ingredient'] },
-    { id: 'fc-term-chantilly', category: 'term', front: { title: 'Chantilly', subtitle: 'Cream' }, back: { mainContent: 'Sweetened vanilla whipped cream.', pronunciation: 'shahn-TIL-ee', bulletPoints: ['Used: Chocolate Mousse'] }, difficulty: 'easy', tags: ['dessert'] },
-    { id: 'fc-term-chevre', category: 'term', front: { title: 'Chèvre', subtitle: 'Cheese' }, back: { mainContent: 'Goat cheese. Tangy, creamy.', pronunciation: 'SHEV-ruh', bulletPoints: ['Used: Fig Flatbread'] }, difficulty: 'easy', tags: ['cheese'] },
-    { id: 'fc-term-brulee', category: 'term', front: { title: 'Brûlée', subtitle: 'Term' }, back: { mainContent: '"Burnt" - torched sugar shell.', pronunciation: 'broo-LAY', bulletPoints: ['Used: Crème Brûlée'] }, difficulty: 'easy', tags: ['dessert'] },
-    { id: 'fc-term-escargot', category: 'term', front: { title: 'Escargot', subtitle: 'Dish' }, back: { mainContent: 'Land snails in garlic-herb butter.', pronunciation: 'es-car-GOH', bulletPoints: ['Burgundian tradition'] }, difficulty: 'easy', tags: ['french-classic'] }
+    { id: 'fc-term-confit', category: 'term', front: { title: 'Confit', subtitle: 'Technique', image: getImg('food8.jpg') }, back: { mainContent: 'Slow poaching in fat at low temp.', pronunciation: 'kon-FEE', bulletPoints: ['Used: Duck Leg Confit'] }, difficulty: 'medium', tags: ['technique'] },
+    { id: 'fc-term-veloute', category: 'term', front: { title: 'Velouté', subtitle: 'Mother Sauce', image: getImg('food9.jpg') }, back: { mainContent: 'Stock-based sauce thickened with roux.', pronunciation: 'veh-loo-TAY', bulletPoints: ['Used: Chicken, Salmon'] }, difficulty: 'medium', tags: ['sauce'] },
+    { id: 'fc-term-mornay', category: 'term', front: { title: 'Mornay', subtitle: 'Sauce', image: getImg('food3.jpeg') }, back: { mainContent: 'Béchamel + gruyère cheese.', pronunciation: 'mor-NAY', bulletPoints: ['Used: Croque Madame'] }, difficulty: 'medium', tags: ['sauce'] },
+    { id: 'fc-term-hollandaise', category: 'term', front: { title: 'Hollandaise', subtitle: 'Mother Sauce', image: getImg('food5.jpeg') }, back: { mainContent: 'Egg yolk + butter + lemon emulsion.', pronunciation: 'hol-un-DAYZ', bulletPoints: ['Used: Eggs Benedict'] }, difficulty: 'easy', tags: ['sauce'] },
+    { id: 'fc-term-coulis', category: 'term', front: { title: 'Coulis', subtitle: 'Sauce', image: getImg('food7.jpeg') }, back: { mainContent: 'Puréed/strained vegetable or fruit sauce.', pronunciation: 'koo-LEE', bulletPoints: ['Used: Duck (carrot-lemongrass)'] }, difficulty: 'medium', tags: ['sauce'] },
+    { id: 'fc-term-pave', category: 'term', front: { title: 'Pavé', subtitle: 'Term', image: getImg('food6.jpeg') }, back: { mainContent: '"Cobblestone" - layered, pressed, sliced.', pronunciation: 'pah-VAY', bulletPoints: ['Used: Salmon (potato pavé)'] }, difficulty: 'hard', tags: ['technique'] },
+    { id: 'fc-term-fondant', category: 'term', front: { title: 'Fondant Potatoes', subtitle: 'Side', image: getImg('food4.jpeg') }, back: { mainContent: 'Seared, then braised in butter/stock.', pronunciation: 'fon-DAHN', bulletPoints: ['Crispy outside, creamy inside'] }, difficulty: 'medium', tags: ['potato'] },
+    { id: 'fc-term-ragout', category: 'term', front: { title: 'Ragoût', subtitle: 'Stew', image: getImg('food2.jpeg') }, back: { mainContent: 'Slow-cooked vegetable/meat stew.', pronunciation: 'ra-GOO', bulletPoints: ['Used: Chicken (mushroom)'] }, difficulty: 'easy', tags: ['technique'] },
+    { id: 'fc-term-frisee', category: 'term', front: { title: 'Frisée', subtitle: 'Green', image: getImg('food1.jpeg') }, back: { mainContent: 'Curly baby endive. Slightly bitter.', pronunciation: 'free-ZAY', bulletPoints: ['Used: Lyonnaise, Duck'] }, difficulty: 'easy', tags: ['ingredient'] },
+    { id: 'fc-term-lardons', category: 'term', front: { title: 'Lardons', subtitle: 'Bacon', image: getImg('food5.jpeg') }, back: { mainContent: 'Small bacon/pork belly strips.', pronunciation: 'lar-DOHN', bulletPoints: ['Used: Salade Lyonnaise'] }, difficulty: 'easy', tags: ['ingredient'] },
+    { id: 'fc-term-chantilly', category: 'term', front: { title: 'Chantilly', subtitle: 'Cream', image: getImg('drink1.jpg') }, back: { mainContent: 'Sweetened vanilla whipped cream.', pronunciation: 'shahn-TIL-ee', bulletPoints: ['Used: Chocolate Mousse'] }, difficulty: 'easy', tags: ['dessert'] },
+    { id: 'fc-term-chevre', category: 'term', front: { title: 'Chèvre', subtitle: 'Cheese', image: getImg('food3.jpeg') }, back: { mainContent: 'Goat cheese. Tangy, creamy.', pronunciation: 'SHEV-ruh', bulletPoints: ['Used: Fig Flatbread'] }, difficulty: 'easy', tags: ['cheese'] },
+    { id: 'fc-term-brulee', category: 'term', front: { title: 'Brûlée', subtitle: 'Term', image: getImg('drink1.jpg') }, back: { mainContent: '"Burnt" - torched sugar shell.', pronunciation: 'broo-LAY', bulletPoints: ['Used: Crème Brûlée'] }, difficulty: 'easy', tags: ['dessert'] },
+    { id: 'fc-term-escargot', category: 'term', front: { title: 'Escargot', subtitle: 'Dish', image: getImg('food3.jpeg') }, back: { mainContent: 'Land snails in garlic-herb butter.', pronunciation: 'es-car-GOH', bulletPoints: ['Burgundian tradition'] }, difficulty: 'easy', tags: ['french-classic'] }
 ];
 
 // FLASHCARD DECKS

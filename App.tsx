@@ -4,16 +4,20 @@ import { GeneralInfoSection } from './components/GeneralInfoSection';
 import { TermsSection } from './components/TermsSection';
 import { Quiz } from './components/Quiz';
 import { SequenceSection } from './components/SequenceSection';
-import { MenuKnowledgeSection } from './components/MenuKnowledgeSection';
+
 import { WineKnowledgeSection } from './components/WineKnowledgeSection';
 import { FinalExamSection } from './components/FinalExamSection';
 import { CourseDashboard } from './components/CourseDashboard';
 import { LoginPage } from './components/LoginPage';
 import { SignupPage } from './components/SignupPage';
 import { ManagerDashboard } from './components/ManagerDashboard';
+
 import { Button } from './components/Button';
 import { MenuMasterySection } from './components/MenuMasterySection';
 import { GuestScenariosSection } from './components/GuestScenariosSection';
+import { TrainerProvider, useTrainer } from './contexts/TrainerContext';
+import VirtualTrainer from './components/VirtualTrainer';
+import { getRandomScript } from './data/marcelScripts';
 import {
   GENERAL_INFO_QUIZ,
   SERVICE_QUIZ,
@@ -58,6 +62,16 @@ const QUIZ_DATA: Record<string, { questions: typeof GENERAL_INFO_QUIZ; accent: '
 // Main App Content (requires auth)
 const AppContent: React.FC = () => {
   const { user, userProfile, logout, loading: authLoading } = useAuth();
+  const { showTrainer, say } = useTrainer();
+
+  // Welcome message on load
+  useEffect(() => {
+    if (user) {
+      const script = getRandomScript('login');
+      // Short delay to allow UI to settle
+      setTimeout(() => say(script.text, 4000), 1000);
+    }
+  }, [user, say]);
 
   // Training state
   const [progress, setProgress] = useState<TrainingProgress | null>(null);
@@ -120,6 +134,9 @@ const AppContent: React.FC = () => {
     } finally {
       setIsSaving(false);
       setViewingSectionIndex(null);
+      // Trigger Marcel for section completion
+      const script = getRandomScript('streak');
+      say(script.text, 3000);
     }
   };
 
@@ -150,6 +167,14 @@ const AppContent: React.FC = () => {
     } finally {
       setIsSaving(false);
       setViewingSectionIndex(null);
+
+      if (passed) {
+        const script = getRandomScript('correct');
+        showTrainer(script.text, script.emotion);
+      } else {
+        const script = getRandomScript('incorrect');
+        showTrainer(script.text, script.emotion);
+      }
     }
   };
 
@@ -172,6 +197,9 @@ const AppContent: React.FC = () => {
       setIsSaving(false);
       if (passed) {
         setViewingSectionIndex(null);
+        showTrainer("Congratulations! You have passed the final exam!", 'happy');
+      } else {
+        showTrainer("Do not give up! Review the material and try again.", 'stern');
       }
     }
   };
@@ -319,7 +347,7 @@ const AppContent: React.FC = () => {
             onSelectSection={handleViewSection}
           />
         ) : (
-          <div>
+          <div className="relative">
             <Button
               variant="outline"
               onClick={handleReturnToDashboard}
@@ -331,6 +359,9 @@ const AppContent: React.FC = () => {
             {renderActiveSection()}
           </div>
         )}
+
+        {/* Virtual Trainer Component */}
+        <VirtualTrainer />
       </div>
 
       <footer className="text-center py-6 text-sm text-gray-500 border-t mt-10">
@@ -369,7 +400,9 @@ const AuthWrapper: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <AuthWrapper />
+      <TrainerProvider>
+        <AuthWrapper />
+      </TrainerProvider>
     </AuthProvider>
   );
 };

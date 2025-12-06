@@ -5,6 +5,7 @@ import { Button } from './Button';
 import { ProgressBar } from './ProgressBar';
 import { ENHANCED_MENU_ITEMS } from '../data/menuItems';
 import type { Flashcard, FlashcardDeck, EnhancedMenuItem } from '../types/enhanced';
+import { AVAILABLE_IMAGES } from '../constants';
 
 interface MenuMasterySectionProps {
     onComplete: () => void;
@@ -12,14 +13,22 @@ interface MenuMasterySectionProps {
 
 type ViewMode = 'menu' | 'learn' | 'flashcards' | 'practice';
 
+const BASE_IMG_PATH = "/french_goat_images/";
+
 // Convert menu items to flashcards
 const createMenuFlashcards = (): FlashcardDeck => {
-    const cards: Flashcard[] = ENHANCED_MENU_ITEMS.map(item => ({
+    // Filter for food-appropriate images (excluding wine/drinks/storefront if possible, or just use all)
+    // For simplicity, we use the food images we identified: food1-9
+    const foodImages = AVAILABLE_IMAGES.filter(img => img.startsWith('food'));
+
+    const cards: Flashcard[] = ENHANCED_MENU_ITEMS.map((item, index) => ({
         id: item.id,
         category: 'menu',
         front: {
             title: item.name,
-            subtitle: `$${item.price} • ${item.category}`
+            subtitle: `$${item.price} • ${item.category}`,
+            // Deterministically assign an image based on index
+            image: `${BASE_IMG_PATH}${foodImages[index % foodImages.length]}`
         },
         back: {
             mainContent: item.description,

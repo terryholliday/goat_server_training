@@ -170,6 +170,7 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         name: 'Lump Crab & Macaroni Gratin',
         category: 'petite-plate',
         price: 22,
+        preparationNotes: 'Dinner $22, Brunch $18',
         description: 'Jumbo lump crab with caper-lemon béchamel, sharp cheddar, gruyère, and parmesan.',
         ingredients: ['jumbo lump crab', 'macaroni', 'capers', 'lemon', 'béchamel', 'sharp cheddar', 'gruyère', 'parmesan'],
         allergens: ['shellfish', 'gluten', 'dairy'],
@@ -232,7 +233,7 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         id: 'soup-of-the-day',
         name: 'Soup of the Day',
         category: 'soup',
-        price: 12,
+        price: 11,
         description: 'Chef\'s daily crafted soup made with seasonal ingredients.',
         ingredients: ['seasonal vegetables', 'house-made stock', 'herbs'],
         allergens: [],
@@ -283,6 +284,25 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         ],
         flavorNotes: ['bitter', 'savory', 'bright', 'complex'],
         isGlutenFree: false,
+        serviceTime: 'dinner'
+    },
+    {
+        id: 'tuna-nicoise',
+        name: 'Tuna Niçoise',
+        category: 'main',
+        price: 33,
+        description: 'Seared ahi tuna, haricot verts, hard boiled egg, fingerlings, olives, baby greens, balsamic vinaigrette.',
+        ingredients: ['ahi tuna', 'haricot verts', 'egg', 'fingerling potatoes', 'olives', 'baby greens', 'balsamic vinaigrette'],
+        allergens: ['fish', 'eggs'],
+        substitutions: [
+            { forAllergen: 'fish', substitute: 'Sub Chicken or Steak', notes: 'Protein substitution available' }
+        ],
+        chefStory: 'A classic French salad composed of cooked and raw vegetables, protein, and garnish. We use sashimi-grade seared tuna and fingerling potatoes for an elevated touched.',
+        pronunciation: 'nee-SWAHZ',
+        upsellPairings: [
+            { type: 'wine', itemName: 'Fleurs de Prairie Rosé', suggestedScript: 'A dry Rosé is the traditional pairing for a Niçoise salad.' }
+        ],
+        flavorNotes: ['fresh', 'savory', 'acidic', 'balanced'],
         serviceTime: 'dinner'
     },
 
@@ -516,6 +536,57 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         serviceTime: 'brunch'
     },
     {
+        id: 'baked-eggs-florentine',
+        name: 'Baked Eggs Florentine',
+        category: 'brunch',
+        subcategory: 'eggs',
+        price: 17,
+        description: 'Sautéed spinach, poached eggs, sauce mornay, shaved parmesan, petite salad.',
+        ingredients: ['spinach', 'eggs', 'mornay sauce', 'parmesan', 'mixed greens'],
+        allergens: ['eggs', 'dairy'],
+        substitutions: [],
+        chefStory: 'Florentine refers to a dish served with spinach. Our baked version features a rich mornay sauce that gratins beautifully over the eggs and spinach.',
+        upsellPairings: [
+            { type: 'drink', itemName: 'Mimosa', suggestedScript: 'A mimosa cuts through the richness of the mornay sauce.' }
+        ],
+        flavorNotes: ['creamy', 'iron-rich', 'savory'],
+        isVegetarian: true,
+        serviceTime: 'brunch'
+    },
+    {
+        id: 'house-quiche',
+        name: 'House Quiche',
+        category: 'brunch',
+        subcategory: 'eggs',
+        price: 14,
+        description: 'Quiche of the day served with salad or frites.',
+        ingredients: ['eggs', 'cream', 'pastry shell', 'seasonal ingredients'],
+        allergens: ['eggs', 'dairy', 'gluten'],
+        substitutions: [],
+        chefStory: 'Our quiche features a buttery house-made crust and a custard fillings that changes daily based on seasonal vegetables and meats.',
+        pronunciation: 'KEESH',
+        upsellPairings: [],
+        flavorNotes: ['rich', 'buttery', 'seasonal'],
+        serviceTime: 'brunch'
+    },
+    {
+        id: 'steak-and-eggs',
+        name: 'Steak and Eggs',
+        category: 'brunch',
+        subcategory: 'mains',
+        price: 24,
+        description: 'Chargrilled coulotte sirloin, sunny side eggs, sweet potato hash.',
+        ingredients: ['coulotte sirloin', 'eggs', 'sweet potato', 'onions', 'peppers'],
+        allergens: ['eggs'],
+        substitutions: [],
+        chefStory: 'A hearty brunch classic. We use the same high-quality coulotte steak from our dinner menu, paired with a savory sweet potato hash.',
+        upsellPairings: [
+            { type: 'drink', itemName: 'Bloody Mary', suggestedScript: 'A spicy Bloody Mary stands up to the steak perfectly.' }
+        ],
+        flavorNotes: ['beefy', 'savory', 'sweet potato'],
+        serviceTime: 'brunch'
+    },
+    {
         id: 'salad-lyonnaise',
         name: 'Salade Lyonnaise',
         category: 'brunch',
@@ -575,6 +646,41 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
             { type: 'drink', itemName: 'Espresso', suggestedScript: 'An espresso enhances the chocolate notes wonderfully.' }
         ],
         flavorNotes: ['rich chocolate', 'airy', 'bittersweet', 'creamy'],
+        isVegetarian: true,
+        isGlutenFree: true,
+        serviceTime: 'both'
+    },
+    {
+        id: 'sorbet',
+        name: 'Sorbet',
+        category: 'dessert',
+        price: 9,
+        description: 'House-made seasonal sorbet (Changes Daily).',
+        ingredients: ['fruit juice', 'sugar', 'water'],
+        allergens: [],
+        substitutions: [],
+        chefStory: 'Refreshing and dairy-free, our sorbets are churned daily using the freshest seasonal fruits.',
+        pronunciation: 'sor-BAY',
+        upsellPairings: [],
+        flavorNotes: ['fruit-forward', 'refreshing', 'icy'],
+        isVegetarian: true,
+        isVegan: true,
+        isGlutenFree: true,
+        serviceTime: 'both'
+    },
+    {
+        id: 'gelato',
+        name: 'Gelato',
+        category: 'dessert',
+        price: 9,
+        description: 'House-made gelato (Changes Daily).',
+        ingredients: ['milk', 'cream', 'sugar', 'flavorings'],
+        allergens: ['dairy'],
+        substitutions: [],
+        chefStory: 'Our gelato is made in the Italian tradition—denser and smoother than ice cream, with intense flavor clarity.',
+        pronunciation: 'jeh-LAH-toh',
+        upsellPairings: [],
+        flavorNotes: ['creamy', 'dense', 'rich'],
         isVegetarian: true,
         isGlutenFree: true,
         serviceTime: 'both'
