@@ -30,11 +30,11 @@ export const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({ onComple
         <ProgressBar value={page + 1} total={total} color="bg-blue-600" />
 
         {/* Featured Image */}
-        <div className="rounded-xl overflow-hidden shadow-lg">
+        <div className="rounded-xl overflow-hidden shadow-lg bg-slate-100">
           <img
             src={pageImage}
             alt={data.title}
-            className="w-full h-56 object-cover"
+            className="w-full max-h-72 object-contain mx-auto"
             onError={(e) => {
               (e.target as HTMLImageElement).src = IMAGE_MAP.fallback;
             }}

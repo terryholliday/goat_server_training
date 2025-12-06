@@ -125,65 +125,65 @@ export async function initializeProgress(uid: string): Promise<TrainingProgress>
 
 export async function markSectionComplete(
     uid: string,
-    sectionIndex: number
-): Promise<void> {
+    sectionIndex: number,
+    shouldUnlockNext: boolean = true
+): Promise<TrainingProgress> {
     const progressRef = doc(db, 'progress', uid);
     const current = await getTrainingProgress(uid);
 
     if (!current) {
         const newProgress = await initializeProgress(uid);
         newProgress.completedSections = [sectionIndex];
-        newProgress.currentSectionIndex = sectionIndex + 1;
+        if (shouldUnlockNext) {
+            newProgress.currentSectionIndex = sectionIndex + 1;
+        }
         await setDoc(progressRef, {
             ...newProgress,
             lastUpdated: serverTimestamp()
         });
-        return;
+        return newProgress;
     }
 
     const completedSections = [...new Set([...current.completedSections, sectionIndex])];
-    const currentSectionIndex = Math.max(current.currentSectionIndex, sectionIndex + 1);
+    const currentSectionIndex = shouldUnlockNext
+        ? Math.max(current.currentSectionIndex, sectionIndex + 1)
+        : current.currentSectionIndex;
 
     await updateDoc(progressRef, {
         completedSections,
         currentSectionIndex,
         lastUpdated: serverTimestamp()
     });
+
+    return {
+        ...current,
+        completedSections,
+        currentSectionIndex,
+        lastUpdated: new Date()
+    };
 }
 
 export async function saveQuizScore(
     uid: string,
-    quizResult: QuizResult
-): Promise<void> {
-    const progressRef = doc(db, 'progress', uid);
-    const current = await getTrainingProgress(uid);
-
-    if (!current) {
-        const newProgress = await initializeProgress(uid);
-        newProgress.quizScores = [quizResult];
-        await setDoc(progressRef, {
-            ...newProgress,
-            quizScores: [{
+    quizId: string,
+    quizScores: [{
                 ...quizResult,
-                completedAt: serverTimestamp()
+        completedAt: serverTimestamp()
             }],
-            lastUpdated: serverTimestamp()
+    lastUpdated: serverTimestamp()
         });
-        return;
+return;
     }
 
-    const quizScores = [...current.quizScores, {
-        ...quizResult,
-        completedAt: new Date() // Will be saved as timestamp
-    }];
+const quizScores = [...current.quizScores, quizResult];
 
-    await updateDoc(progressRef, {
-        quizScores: quizScores.map(q => ({
-            ...q,
-            completedAt: q.completedAt instanceof Date ? Timestamp.fromDate(q.completedAt) : q.completedAt
-        })),
-        lastUpdated: serverTimestamp()
-    });
+await updateDoc(progressRef, {
+    quizScores: quizScores.map(q => ({
+        ...q,
+        completedAt: q.completedAt instanceof Date ? Timestamp.fromDate(q.completedAt) : q.completedAt
+    })),
+    lastUpdated: serverTimestamp()
+});
 }
 
 export async function saveFinalExamAttempt(
