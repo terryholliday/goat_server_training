@@ -43,7 +43,7 @@ class SoundService {
     private currentAudio: HTMLAudioElement | null = null;
 
     // Speak text using Web Speech API or play Audio file
-    public speak(text: string, audioFile?: string) {
+    public speak(text: string, audioFile?: string, options?: { onEnded?: () => void }) {
         // Stop any current speech or audio
         if (this.speechSynthesis.speaking) {
             this.speechSynthesis.cancel();
@@ -56,6 +56,9 @@ class SoundService {
         // If audio file is provided, play it and DO NOT use TTS
         if (audioFile) {
             this.currentAudio = new Audio(audioFile);
+            if (options?.onEnded) {
+                this.currentAudio.addEventListener('ended', options.onEnded);
+            }
             this.currentAudio.play().catch(e => console.error("Error playing audio file:", e));
             return;
         }

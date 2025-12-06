@@ -31,6 +31,8 @@ interface TrainerProviderProps {
     children: ReactNode;
 }
 
+import { soundService } from '../services/SoundService';
+
 export function TrainerProvider({ children }: TrainerProviderProps) {
     const [isVisible, setIsVisible] = useState(false); // Hidden by default, appears when needed or on delays
     const [message, setMessage] = useState<string | null>(null);
@@ -44,15 +46,14 @@ export function TrainerProvider({ children }: TrainerProviderProps) {
         setAudio(audioFile || null);
         setIsVisible(true);
         setIsTalking(true);
-
-        // Stop "talking" animation after a rough estimate of reading time (or fixed)
-        setTimeout(() => setIsTalking(false), 2000);
+        // We rely on the caller or 'say' to handle stop talking timing
     }, []);
 
     const hideTrainer = useCallback(() => {
         setIsVisible(false);
         setMessage(null);
         setAudio(null);
+        setIsTalking(false);
     }, []);
 
     const setTrainerEmotion = useCallback((emo: MarcelEmotion) => {
@@ -60,14 +61,41 @@ export function TrainerProvider({ children }: TrainerProviderProps) {
     }, []);
 
     const say = useCallback((msg: string, audioFile?: string, duration: number = 5000) => {
-        showTrainer(msg, 'neutral', audioFile);
-        // Auto-hide after duration if strictly informational
-        if (duration > 0) {
+        // Reset state first to ensure clean transition
+        setMessage(msg);
+        setEmotion('neutral');
+        setAudio(audioFile || null);
+        setIsVisible(true);
+        setIsTalking(true);
+
+        if (audioFile) {
+            // Play audio and sync visibility
+            soundService.speak(msg, audioFile, {
+                onEnded: () => {
+                    setIsTalking(false);
+                    // Keep him on screen for a moment after speaking
+                    setTimeout(() => {
+                        hideTrainer();
+                    }, 1000);
+                }
+            });
+        } else {
+            // Text only fallback
+            soundService.speak(msg);
+
+            // Artificial talking animation time
             setTimeout(() => {
-                setIsVisible(false);
-            }, duration);
+                setIsTalking(false);
+            }, 2000);
+
+            // Auto-hide after duration
+            if (duration > 0) {
+                setTimeout(() => {
+                    hideTrainer();
+                }, duration);
+            }
         }
-    }, [showTrainer]);
+    }, [hideTrainer]);
 
     const value = {
         isVisible,

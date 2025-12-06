@@ -17,14 +17,7 @@ const VirtualTrainer: React.FC = () => {
         }
     }, [isVisible]);
 
-    useEffect(() => {
-        // Speak when message changes and is not null
-        if (message && message !== prevMessageRef.current && isVisible) {
-            // Note: audio can be undefined, speak handles that
-            soundService.speak(message, audio || undefined);
-            prevMessageRef.current = message;
-        }
-    }, [message, audio, isVisible]);
+    // Sound handled by TrainerContext now
 
     if (!isVisible && !animateIn) return null;
 
@@ -39,54 +32,65 @@ const VirtualTrainer: React.FC = () => {
     };
 
     return (
-        <div className={`fixed bottom-4 right-4 z-50 flex flex-col items-end transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        <div className={`fixed bottom-0 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center transition-all duration-500 ease-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
 
             {/* Speech Bubble */}
             {message && (
-                <div className="bg-white p-4 rounded-2xl rounded-br-none shadow-lg mb-2 max-w-xs border border-gray-200 relative animate-fade-in-up">
-                    <p className="text-gray-800 font-medium text-sm md:text-base font-serif">
+                <div className="bg-white p-6 rounded-2xl rounded-bl-none shadow-2xl mb-4 max-w-md border-2 border-indigo-100 relative animate-fade-in-up origin-bottom">
+                    <p className="text-gray-800 font-medium text-lg font-serif leading-relaxed">
                         {message}
                     </p>
                     {/* Close button */}
                     <button
                         onClick={hideTrainer}
-                        className="absolute -top-2 -right-2 bg-gray-200 hover:bg-gray-300 rounded-full p-1 text-gray-600 text-xs transition-colors"
+                        className="absolute -top-3 -right-3 bg-white hover:bg-red-50 text-red-400 border border-red-100 rounded-full w-6 h-6 flex items-center justify-center shadow-sm transition-colors"
                         aria-label="Close trainer"
                     >
                         ✕
                     </button>
+                    {/* Triangle pointer */}
+                    <div className="absolute -bottom-2 left-8 w-4 h-4 bg-white border-b-2 border-r-2 border-indigo-100 transform rotate-45 z-10"></div>
                 </div>
             )}
 
             {/* Avatar */}
             <div className="relative group cursor-pointer" onClick={() => hideTrainer()}>
-                <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-white hover:scale-105 transition-transform duration-200 ${isTalking ? 'animate-talk-bob' : ''}`}>
+                <div className={`w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 transition-transform duration-300 ${isTalking ? 'animate-talk-strong' : 'animate-breathe'}`}>
                     <img
                         src={getEmotionImage()}
                         alt={`Marcel - ${emotion}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain filter drop-shadow-2xl"
                     />
                 </div>
                 {/* Name Badge */}
-                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full shadow-sm font-bold tracking-wide">
-                    MARCEL
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-sm px-4 py-1 rounded-full shadow-lg font-bold tracking-wide uppercase border-2 border-white">
+                    Marcel
                 </div>
             </div>
 
             <style>{`
-                @keyframes talk-bob {
+                @keyframes talk-strong {
                     0%, 100% { transform: translateY(0) scale(1); }
-                    50% { transform: translateY(-3px) scale(1.02); }
+                    25% { transform: translateY(-8px) scale(1.02); }
+                    50% { transform: translateY(0) scale(0.98); }
+                    75% { transform: translateY(-4px) scale(1.01); }
                 }
-                .animate-talk-bob {
-                    animation: talk-bob 0.2s infinite;
+                @keyframes breathe {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.02) translateY(-2px); }
+                }
+                .animate-talk-strong {
+                    animation: talk-strong 0.4s infinite ease-in-out;
+                }
+                .animate-breathe {
+                    animation: breathe 4s infinite ease-in-out;
                 }
                 .animate-fade-in-up {
-                    animation: fade-in-up 0.5s ease-out;
+                    animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1);
                 }
                 @keyframes fade-in-up {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
+                    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
                 }
             `}</style>
         </div>
