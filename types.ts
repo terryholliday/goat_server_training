@@ -32,6 +32,7 @@ export interface Term {
   term: string;
   pronunciation: string;
   definition: string;
+  image?: string;
 }
 
 export interface MCQ {

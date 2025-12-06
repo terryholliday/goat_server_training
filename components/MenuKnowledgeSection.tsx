@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { MENU_KNOWLEDGE_PAGES, IMAGE_MAP } from '../constants';
 import { SectionWrapper } from './SectionWrapper';
-import { SafeImage } from './SafeImage';
 import { Button } from './Button';
 import { ProgressBar } from './ProgressBar';
 
@@ -22,6 +21,7 @@ export const MenuKnowledgeSection: React.FC<MenuKnowledgeSectionProps> = ({ onCo
   const total = MENU_KNOWLEDGE_PAGES.length;
   const data = MENU_KNOWLEDGE_PAGES[page];
   const isLastPage = page === total - 1;
+  const pageImage = IMAGE_MAP.menuKnowledge[page % IMAGE_MAP.menuKnowledge.length];
 
   const handleNext = () => {
     if (isLastPage) {
@@ -35,9 +35,22 @@ export const MenuKnowledgeSection: React.FC<MenuKnowledgeSectionProps> = ({ onCo
     <SectionWrapper title={`Menu Knowledge (${page + 1}/${total})`} accent="purple">
       <div className="space-y-6">
         <ProgressBar value={page + 1} total={total} color="bg-purple-600" />
-        <div className="bg-purple-50/50 p-6 rounded-lg">
-          <h3 className="text-xl font-bold text-purple-900 mb-4">{data.title}</h3>
-          <div className="text-base text-gray-700 space-y-3">
+
+        {/* Featured Image */}
+        <div className="rounded-xl overflow-hidden shadow-lg">
+          <img
+            src={pageImage}
+            alt={data.title}
+            className="w-full h-56 object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = IMAGE_MAP.fallback;
+            }}
+          />
+        </div>
+
+        <div className="bg-purple-50/50 dark:bg-zinc-900/50 p-6 rounded-lg">
+          <h3 className="text-xl font-bold text-purple-900 dark:text-purple-400 mb-4">{data.title}</h3>
+          <div className="text-base text-gray-700 dark:text-gray-300 space-y-3">
             {data.content.split('\n').map((line, index) => {
               if (line.trim() === '') return null; // Skip empty lines
 
@@ -50,8 +63,8 @@ export const MenuKnowledgeSection: React.FC<MenuKnowledgeSectionProps> = ({ onCo
 
                 return (
                   <div key={index} className="py-2">
-                    <p className="font-semibold text-gray-800">{renderWithBold(titlePart)}</p>
-                    {descriptionPart && <p className="text-sm text-gray-600 pl-4">{descriptionPart}</p>}
+                    <p className="font-semibold text-gray-800 dark:text-gray-200">{renderWithBold(titlePart)}</p>
+                    {descriptionPart && <p className="text-sm text-gray-600 dark:text-gray-400 pl-4">{descriptionPart}</p>}
                   </div>
                 );
               }
@@ -59,7 +72,7 @@ export const MenuKnowledgeSection: React.FC<MenuKnowledgeSectionProps> = ({ onCo
               // Subheading (Category)
               if (line.trim().startsWith('**') && line.trim().endsWith('**') && line.split('**').length === 3) {
                 const content = line.replace(/\*\*/g, '');
-                return <h4 key={index} className="text-xl font-bold text-purple-900 pt-4 pb-2 mt-2 border-b border-purple-200">{content}</h4>;
+                return <h4 key={index} className="text-xl font-bold text-purple-900 dark:text-purple-400 pt-4 pb-2 mt-2 border-b border-purple-200 dark:border-purple-800">{content}</h4>;
               }
 
               // Regular paragraph

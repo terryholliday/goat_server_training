@@ -6,10 +6,10 @@ import { Button } from './Button';
 import { ProgressBar } from './ProgressBar';
 
 interface TermsSectionProps {
-    onComplete: () => void;
+  onComplete: () => void;
 }
 
-const TERMS_PER_PAGE = 5;
+const TERMS_PER_PAGE = 4;
 
 export const TermsSection: React.FC<TermsSectionProps> = ({ onComplete }) => {
   const [page, setPage] = useState(0);
@@ -34,22 +34,36 @@ export const TermsSection: React.FC<TermsSectionProps> = ({ onComplete }) => {
 
   return (
     <SectionWrapper title={`Culinary Terms (${page + 1}/${totalPages})`} accent="rose">
-        <ProgressBar value={page + 1} total={totalPages} color="bg-rose-600" />
-        <div className="space-y-6 mt-6">
-            {currentTerms.map((term, idx) => (
-            <div key={idx} className="border-b pb-4">
-                <h3 className="text-lg font-bold text-gray-900">{term.term}</h3>
-                <p className="text-sm italic text-rose-600 mb-1">{term.pronunciation}</p>
-                <p className="text-sm text-gray-600 mt-2">{term.definition}</p>
+      <ProgressBar value={page + 1} total={totalPages} color="bg-rose-600" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        {currentTerms.map((term, idx) => (
+          <div key={idx} className="bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-700 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            {term.image && (
+              <div className="h-40 w-full overflow-hidden">
+                <img
+                  src={term.image}
+                  alt={term.term}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
+            <div className="p-4">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">{term.term}</h3>
+              <p className="text-sm italic text-rose-600 dark:text-rose-400 mb-2">{term.pronunciation}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">{term.definition}</p>
             </div>
-            ))}
-        </div>
-        <div className="flex justify-between items-center mt-8">
-            <Button variant="outline" disabled={page === 0} onClick={handleBack}>Back</Button>
-            <Button onClick={handleNext}>
-                {isLastPage ? 'Complete Section' : 'Next'}
-            </Button>
-        </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-between items-center mt-8">
+        <Button variant="outline" disabled={page === 0} onClick={handleBack}>Back</Button>
+        <Button onClick={handleNext}>
+          {isLastPage ? 'Complete Section' : 'Next'}
+        </Button>
+      </div>
     </SectionWrapper>
   );
 };
