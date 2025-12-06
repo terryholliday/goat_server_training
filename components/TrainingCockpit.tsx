@@ -240,7 +240,7 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
                     onClick={() => setActiveMobileTab('canvas')}
                     className={cn("flex-1 py-3 text-sm font-medium border-b-2 transition-colors", activeMobileTab === 'canvas' ? "border-indigo-500 text-indigo-600" : "border-transparent text-slate-500")}
                 >
-                    Canvas
+                    Chat
                 </button>
             </div>
 
@@ -267,7 +267,7 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
                 <main
                     className={cn(
                         "flex-1 flex flex-col h-full relative transition-all duration-300 overflow-hidden",
-                        activeMobileTab !== 'canvas' && "hidden md:flex"
+                        activeMobileTab === 'sidebar' && "hidden md:flex"
                     )}
                 >
                     <WorkspacePanel />
@@ -277,7 +277,7 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
                 <aside
                     className={cn(
                         "hidden md:block w-[350px] h-full relative z-10 bg-white dark:bg-zinc-950 transition-all",
-                        activeMobileTab === 'chat' && "block absolute inset-0 md:relative md:inset-auto w-full"
+                        activeMobileTab === 'canvas' && "block absolute inset-0 md:relative md:inset-auto w-full"
                     )}
                 >
                     <ChatPanel />
