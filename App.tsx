@@ -17,13 +17,16 @@ import { MenuMasterySection } from './components/MenuMasterySection';
 import { GuestScenariosSection } from './components/GuestScenariosSection';
 import { TrainerProvider, useTrainer } from './contexts/TrainerContext';
 import VirtualTrainer from './components/VirtualTrainer';
+import { FineDiningSection } from './components/FineDiningSection';
 import { getRandomScript } from './data/marcelScripts';
 import {
   GENERAL_INFO_QUIZ,
   SERVICE_QUIZ,
   TERMS_QUIZ,
   MENU_QUIZ,
+  MENU_QUIZ,
   WINE_QUIZ,
+  FINE_DINING_QUIZ,
 } from './constants';
 import {
   getTrainingProgress,
@@ -47,6 +50,8 @@ const SECTIONS = [
   { id: 'wine-knowledge', title: "Wine Knowledge", description: "Explore our wine philosophy and offerings.", type: 'content' as const },
   { id: 'wine-quiz', title: "Wine Quiz", description: "Test your knowledge of our wine program.", type: 'quiz' as const },
   { id: 'guest-scenarios', title: "Guest Interaction Scenarios", description: "Practice handling real-world guest situations.", type: 'content' as const },
+  { id: 'fine-dining-etiquette', title: "Fine Dining Etiquette", description: "Master advanced service skills like crumbing and wine rituals.", type: 'content' as const },
+  { id: 'fine-dining-quiz', title: "Etiquette Quiz", description: "Test your knowledge of fine dining standards.", type: 'quiz' as const },
   { id: 'final-exam', title: "Final Certification Exam", description: "75+ question comprehensive exam. 80% required to pass.", type: 'exam' as const },
 ];
 
@@ -56,7 +61,9 @@ const QUIZ_DATA: Record<string, { questions: typeof GENERAL_INFO_QUIZ; accent: '
   'service-quiz': { questions: SERVICE_QUIZ, accent: 'green' },
   'terms-quiz': { questions: TERMS_QUIZ, accent: 'rose' },
   'menu-quiz': { questions: MENU_QUIZ, accent: 'purple' },
+  'menu-quiz': { questions: MENU_QUIZ, accent: 'purple' },
   'wine-quiz': { questions: WINE_QUIZ, accent: 'amber' },
+  'fine-dining-quiz': { questions: FINE_DINING_QUIZ, accent: 'rose' },
 };
 
 // Main App Content (requires auth)
@@ -243,6 +250,8 @@ const AppContent: React.FC = () => {
           return <WineKnowledgeSection onComplete={handleSectionComplete} />;
         case 'guest-scenarios':
           return <GuestScenariosSection onComplete={handleSectionComplete} />;
+        case 'fine-dining-etiquette':
+          return <FineDiningSection onComplete={handleSectionComplete} />;
         default:
           return null;
       }

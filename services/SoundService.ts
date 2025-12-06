@@ -1,110 +1,64 @@
-export class SoundService {
+
+class SoundService {
     private audioContext: AudioContext | null = null;
-    private isMuted: boolean = false;
+    private speechSynthesis: SpeechSynthesis = window.speechSynthesis;
 
     constructor() {
-        if (typeof window !== 'undefined') {
+        this.initAudio();
+    }
+
+    private initAudio() {
+        if (typeof window !== 'undefined' && !this.audioContext) {
             this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
         }
     }
 
-    private getContext(): AudioContext | null {
-        if (!this.audioContext && typeof window !== 'undefined') {
-            this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    // Play a simple pop sound (synthesized)
+    public playPop() {
+        if (!this.audioContext) this.initAudio();
+        if (!this.audioContext) return;
+
+        try {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(400, this.audioContext.currentTime + 0.1);
+
+            gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+
+            oscillator.start();
+            oscillator.stop(this.audioContext.currentTime + 0.1);
+        } catch (e) {
+            console.error('Error playing sound:', e);
         }
-        return this.audioContext;
     }
 
-    playSuccess() {
-        if (this.isMuted) return;
-        const ctx = this.getContext();
-        if (!ctx) return;
-
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(500, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1000, ctx.currentTime + 0.1);
-
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-    }
-
-    playError() {
-        if (this.isMuted) return;
-        const ctx = this.getContext();
-        if (!ctx) return;
-
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(200, ctx.currentTime);
-        osc.frequency.linearRampToValueAtTime(100, ctx.currentTime + 0.3);
-
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-
-        osc.start();
-        osc.stop(ctx.currentTime + 0.3);
-    }
-
-    playPop() {
-        if (this.isMuted) return;
-        const ctx = this.getContext();
-        if (!ctx) return;
-
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(600, ctx.currentTime);
-        gain.gain.setValueAtTime(0.05, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
-
-        osc.start();
-        osc.stop(ctx.currentTime + 0.1);
-    }
-
-    speak(text: string) {
-        if (this.isMuted || !('speechSynthesis' in window)) return;
-
-        // Cancel previous speech
-        window.speechSynthesis.cancel();
+    // Speak text using Web Speech API
+    public speak(text: string) {
+        if (this.speechSynthesis.speaking) {
+            this.speechSynthesis.cancel();
+        }
 
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1.1;
-        utterance.pitch = 1.0;
-
-        // Try to find a French voice, or a French-accented English voice
-        const voices = window.speechSynthesis.getVoices();
-        // Prefer a French voice if the text is French? 
-        // Marcel speaks English with a French accent in the text ("Bonjour!"). 
-        // Using a French voice for English text usually sounds like a heavy French accent.
+        // Try to find a French voice if possible, or a good English one
+        const voices = this.speechSynthesis.getVoices();
         const frenchVoice = voices.find(v => v.lang.includes('fr'));
+        const englishVoice = voices.find(v => v.lang.includes('en'));
+
         if (frenchVoice) {
-            utterance.voice = frenchVoice;
+            // utterance.voice = frenchVoice; // Marcel should probably speak English with an accent, but for now English is safer for clarity
         }
 
-        window.speechSynthesis.speak(utterance);
-    }
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
 
-    toggleMute() {
-        this.isMuted = !this.isMuted;
-        return this.isMuted;
+        this.speechSynthesis.speak(utterance);
     }
 }
 
