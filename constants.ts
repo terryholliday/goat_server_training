@@ -1,4 +1,4 @@
-import type { Wine, MenuItem, InfoPage, SequenceStep, Term, MCQ } from './types';
+import type { Wine, MenuItem, InfoPage, SequenceStep, Term, MCQ, SectionDefinition } from './types';
 
 // Available images in public/french_goat_images (excluding Marcel)
 export const AVAILABLE_IMAGES = [
@@ -322,3 +322,19 @@ export const SECTION_IDS = [
 ] as const;
 
 export type SectionId = typeof SECTION_IDS[number];
+
+export const SECTIONS: SectionDefinition[] = [
+  { id: 'general-info', title: 'General Information', description: 'Restaurant history, mission, and basic facts', type: 'content' },
+  { id: 'general-info-quiz', title: 'General Info Quiz', description: 'Test your knowledge of The French Goat', type: 'quiz' },
+  { id: 'sequence-of-service', title: 'Sequence of Service', description: 'Step-by-step guide to our service standards', type: 'content' },
+  { id: 'service-quiz', title: 'Service Standards Quiz', description: 'Review the 10 steps of service', type: 'quiz' },
+  { id: 'culinary-terms', title: 'Culinary Terms', description: 'Essential French culinary terminology', type: 'content' },
+  { id: 'terms-quiz', title: 'Culinary Terms Quiz', description: 'Vocabulary check', type: 'quiz' },
+  { id: 'menu-knowledge', title: 'Menu Knowledge', description: 'Detailed study of our current dinner and brunch menus', type: 'content' },
+  { id: 'menu-quiz', title: 'Menu Knowledge Quiz', description: 'Test your menu mastery', type: 'quiz' },
+  { id: 'wine-knowledge', title: 'Wine Knowledge', description: 'Regions, varietals, and our wine philosophy', type: 'content' },
+  { id: 'wine-quiz', title: 'Wine Knowledge Quiz', description: 'Sommelier basics', type: 'quiz' },
+  { id: 'fine-dining-etiquette', title: 'Fine Dining Etiquette', description: 'Advanced service skills and polish', type: 'content' },
+  { id: 'fine-dining-quiz', title: 'Fine Dining Quiz', description: 'Etiquette proficiency test', type: 'quiz' },
+  { id: 'final-exam', title: 'Final Certification Exam', description: 'Comprehensive test of all material', type: 'exam' }
+];
