@@ -21,8 +21,8 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({ title, children,
   };
 
   return (
-    <section className="mb-10">
-      <h2 className={`text-2xl font-bold border-b-2 pb-2 mb-6 tracking-wide uppercase ${colorMap[accent]}`}>
+    <section className="mb-10 px-6 py-4 sm:px-8 sm:py-6 lg:px-10 lg:py-8 bg-white rounded-xl shadow-sm">
+      <h2 className={`text-2xl font-bold border-b-2 pb-3 mb-6 tracking-wide uppercase ${colorMap[accent]}`}>
         {title}
       </h2>
       {children}
