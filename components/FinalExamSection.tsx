@@ -20,6 +20,8 @@ export const FinalExamSection: React.FC<FinalExamSectionProps> = ({
   isSaving = false
 }) => {
   const [showExam, setShowExam] = useState(previousAttempts.length === 0);
+  const [isEmailing, setIsEmailing] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const passedPreviously = previousAttempts.some(a => a.passed);
   const bestScore = previousAttempts.length > 0
     ? Math.max(...previousAttempts.map(a => Math.round((a.score / a.totalQuestions) * 100)))
@@ -98,9 +100,28 @@ export const FinalExamSection: React.FC<FinalExamSectionProps> = ({
               </Button>
             )}
             {passedPreviously && (
-              <Button onClick={() => onComplete(true, bestScore, 100)} variant="primary">
-                View Certificate
-              </Button>
+              <>
+                {!emailSent ? (
+                  <Button
+                    onClick={() => {
+                      setIsEmailing(true);
+                      // Simulate network request
+                      setTimeout(() => {
+                        setIsEmailing(false);
+                        setEmailSent(true);
+                      }, 1500);
+                    }}
+                    variant="primary"
+                    disabled={isEmailing}
+                  >
+                    {isEmailing ? 'Sending...' : '📧 Email Results to Manager'}
+                  </Button>
+                ) : (
+                  <div className="flex items-center gap-2 text-green-600 font-medium px-4 py-2 bg-green-50 rounded-lg border border-green-100">
+                    <span>✓ Results Sent!</span>
+                  </div>
+                )}
+              </>
             )}
             <Button onClick={onCancel} variant="outline">
               Close

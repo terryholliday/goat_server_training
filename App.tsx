@@ -17,6 +17,7 @@ import { MenuMasterySection } from './components/MenuMasterySection';
 import { GuestScenariosSection } from './components/GuestScenariosSection';
 import { TrainerProvider, useTrainer } from './contexts/TrainerContext';
 import { TrainingCockpit } from './components/TrainingCockpit';
+import { MarcelWelcome } from './components/MarcelWelcome';
 import VirtualTrainer from './components/VirtualTrainer';
 import { soundService } from './services/SoundService';
 import { getRandomScript } from './data/marcelScripts';
@@ -331,6 +332,9 @@ const AppContent: React.FC = () => {
 
       {/* Virtual Trainer (Marcel) Floats above everything */}
       <VirtualTrainer />
+
+      {/* Onboarding Overlay */}
+      {showWelcome && <MarcelWelcome onDismiss={handleWelcomeDismiss} />}
     </>
   );
 };

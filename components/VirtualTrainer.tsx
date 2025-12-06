@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTrainer } from '../contexts/TrainerContext';
-import { soundService } from '../services/SoundService';
 
 const VirtualTrainer: React.FC = () => {
-    const { isVisible, message, audio, emotion, hideTrainer, isTalking } = useTrainer();
+    const { isVisible, message, emotion, hideTrainer, isTalking } = useTrainer();
     const [animateIn, setAnimateIn] = useState(false);
-    const prevMessageRef = useRef<string | null>(null);
 
     useEffect(() => {
         if (isVisible) {
