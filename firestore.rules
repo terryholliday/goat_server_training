@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the document
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Helper function to check if user is a manager
+    function isManager() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'manager';
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if isAuthenticated() && isOwner(userId);
+      
+      // Users can create their own profile during signup
+      allow create: if isAuthenticated() && isOwner(userId);
+      
+      // Users can update their own profile
+      allow update: if isAuthenticated() && isOwner(userId);
+      
+      // Managers can read all user profiles
+      allow read: if isManager();
+    }
+    
+    // Progress collection
+    match /progress/{userId} {
+      // Users can read and write their own progress
+      allow read, write: if isAuthenticated() && isOwner(userId);
+      
+      // Managers can read all progress
+      allow read: if isManager();
+      
+      // Managers can reset progress (delete and recreate)
+      allow write: if isManager();
+    }
+  }
+}
