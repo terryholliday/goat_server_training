@@ -52,10 +52,10 @@ class SoundService {
         const englishVoice = voices.find(v => v.lang.includes('en'));
 
         if (frenchVoice) {
-            // utterance.voice = frenchVoice; // Marcel should probably speak English with an accent, but for now English is safer for clarity
+            utterance.voice = frenchVoice;
+            // Slow down slightly for the accent to be clearer
+            utterance.rate = 0.9;
         }
-
-        utterance.rate = 1.0;
         utterance.pitch = 1.0;
 
         this.speechSynthesis.speak(utterance);

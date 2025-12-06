@@ -322,6 +322,7 @@ const AppContent: React.FC = () => {
           { role: 'ai', content: "Bonjour! I am Marcel, your virtual maitre d'. I am here to help you master our menu and service standards." }
         ]}
         onSendMessage={(msg) => say(msg, 3000)} // Simple echo for now
+        onLogout={logout}
       />
 
       {/* Virtual Trainer (Marcel) Floats above everything */}

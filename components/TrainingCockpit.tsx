@@ -29,12 +29,14 @@ interface TrainingCockpitProps {
     children?: React.ReactNode;
     chatHistory?: ChatMessageProps[];
     onSendMessage?: (message: string) => void;
+    onLogout?: () => void;
     activeArtifact?: React.ReactNode;
 }
 
 export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
     chatHistory = [],
     onSendMessage,
+    onLogout,
     activeArtifact
 }) => {
     const [activeMobileTab, setActiveMobileTab] = useState<'sidebar' | 'chat' | 'canvas'>('chat');
@@ -111,6 +113,15 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
                     <Settings size={18} />
                     {!isSidebarCollapsed && <span className="text-sm font-medium">Settings</span>}
                 </button>
+                <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 mt-2">
+                    <button
+                        onClick={() => onLogout?.()}
+                        className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors", isSidebarCollapsed && "justify-center")}
+                    >
+                        <X size={18} />
+                        {!isSidebarCollapsed && <span className="text-sm font-medium">Log Out</span>}
+                    </button>
+                </div>
             </div>
         </div>
     );
