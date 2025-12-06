@@ -283,9 +283,10 @@ const AppContent: React.FC = () => {
           return (
             <Quiz
               title={section.title}
-              questionsSource={quizData.questions} // Changed from 'questions' to 'questionsSource' to match original Quiz prop
+              questionsSource={quizData.questions}
               accent={quizData.accent}
-              onComplete={(passed, score, total) => handleQuizComplete(score, total, passed)} // Adjusted signature
+              quizId={section.id}
+              onComplete={(passed, score, total) => handleQuizComplete(score, total, passed)}
               onCancel={handleReturnToDashboard}
             />
           );
