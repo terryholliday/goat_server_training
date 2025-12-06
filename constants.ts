@@ -110,7 +110,7 @@ export const SEQUENCE_OF_SERVICE: SequenceStep[] = [
   },
   {
     title: "5. Appetizer and Entrée Orders",
-    content: "After guests have had time with their beverages, approach to take appetizer and entrée orders. Be prepared to answer detailed questions about ingredients, preparation methods, and potential allergens.\n\nSuggest wine pairings that complement their menu choices. Enter orders accurately into the POS system and communicate any special requests clearly to the kitchen."
+    content: "After guests have had time with their beverages, approach to take appetizer and entrée orders. Be prepared to answer detailed questions about ingredients, preparation methods, and potential allergens.\n\nSuggest wine pairings that complement their menu choices. Enter orders accurately into the POS system and communicate any special requests clearly to the kitchen.\n\nWhen a guest orders Escargot, Mussels, or Oysters, you need to \"mark\" the table by placing demitoss forks on the table in front of the guest(s) who are eating those dishes. When the guest(s) order Mussels, take a discard bowl to the table with the demitoss forks."
   },
   {
     title: "6. Food Service and Table Maintenance",

@@ -25,7 +25,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onSwitchToSignup }) => {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-[#fdfcf9] dark:bg-zinc-950 relative overflow-hidden">
+        <div className="min-h-screen w-full flex items-center justify-center bg-[#fdfcf9] dark:bg-zinc-950 relative">
             {/* Background Effects */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-indigo-500/10 blur-3xl opacity-50" />

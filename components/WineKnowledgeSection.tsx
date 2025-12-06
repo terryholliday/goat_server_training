@@ -14,7 +14,19 @@ export const WineKnowledgeSection: React.FC<WineKnowledgeSectionProps> = ({ onCo
   const [mode, setMode] = useState<'learn' | 'list'>('learn');
   const [learnPage, setLearnPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'All' | 'Red' | 'White' | 'Sparkling' | 'Rosé'>('All');
+
+  // Debounce search term
+  React.useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   // Learn Mode Logic
   const currentLearnPage = WINE_KNOWLEDGE_PAGES[learnPage];
@@ -31,13 +43,13 @@ export const WineKnowledgeSection: React.FC<WineKnowledgeSectionProps> = ({ onCo
   // List Mode Logic
   const filteredWines = useMemo(() => {
     return WINES.filter(wine => {
-      const matchesSearch = wine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        wine.region.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (wine.varietal && wine.varietal.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesSearch = wine.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        wine.region.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        (wine.varietal && wine.varietal.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
       const matchesType = filterType === 'All' || wine.type === filterType;
       return matchesSearch && matchesType;
     });
-  }, [searchTerm, filterType]);
+  }, [debouncedSearchTerm, filterType]);
 
   if (mode === 'learn') {
     return (
@@ -82,8 +94,8 @@ export const WineKnowledgeSection: React.FC<WineKnowledgeSectionProps> = ({ onCo
                 key={type}
                 onClick={() => setFilterType(type as any)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${filterType === type
-                    ? 'bg-amber-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-amber-600 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
               >
                 {type}
@@ -97,9 +109,9 @@ export const WineKnowledgeSection: React.FC<WineKnowledgeSectionProps> = ({ onCo
             <div key={wine.id} className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex justify-between items-start mb-2">
                 <span className={`text-xs font-bold px-2 py-1 rounded uppercase tracking-wide ${wine.type === 'Red' ? 'bg-red-100 text-red-800' :
-                    wine.type === 'White' ? 'bg-yellow-100 text-yellow-800' :
-                      wine.type === 'Rosé' ? 'bg-pink-100 text-pink-800' :
-                        'bg-slate-100 text-slate-800'
+                  wine.type === 'White' ? 'bg-yellow-100 text-yellow-800' :
+                    wine.type === 'Rosé' ? 'bg-pink-100 text-pink-800' :
+                      'bg-slate-100 text-slate-800'
                   }`}>
                   {wine.type}
                 </span>
