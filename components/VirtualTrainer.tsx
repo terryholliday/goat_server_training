@@ -1,24 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTrainer } from '../contexts/TrainerContext';
-import { soundService } from '../services/SoundService';
+
 
 const VirtualTrainer: React.FC = () => {
     const { isVisible, message, emotion, hideTrainer } = useTrainer();
-    const [animateIn, setAnimateIn] = useState(false);
-
-    useEffect(() => {
-        if (isVisible) {
-            setAnimateIn(true);
-            soundService.playPop();
-        } else {
-            const timer = setTimeout(() => setAnimateIn(false), 300);
-            return () => clearTimeout(timer);
-        }
-    }, [isVisible]);
+    // Animation state and effect removed; component now appears instantly without animation.
 
     // Sound handled by TrainerContext now
 
-    if (!isVisible && !animateIn) return null;
+    if (!isVisible) return null;
 
     const getEmotionImage = () => {
         switch (emotion) {
@@ -35,7 +25,7 @@ const VirtualTrainer: React.FC = () => {
 
             {/* Speech Bubble */}
             {message && (
-                <div className="bg-white p-6 rounded-2xl rounded-bl-none shadow-2xl mb-4 max-w-md border-2 border-indigo-100 relative animate-fade-in-up origin-bottom">
+                <div className="bg-white p-6 rounded-2xl rounded-bl-none shadow-2xl mb-4 max-w-md border-2 border-indigo-100 relative origin-bottom">
                     <p className="text-gray-800 font-medium text-lg font-serif leading-relaxed">
                         {message}
                     </p>
@@ -67,15 +57,7 @@ const VirtualTrainer: React.FC = () => {
                 </div>
             </div>
 
-            <style>{`
-                .animate-fade-in-up {
-                    animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-                }
-                @keyframes fade-in-up {
-                    from { opacity: 0; transform: translateY(20px) scale(0.9); }
-                    to { opacity: 1; transform: translateY(0) scale(1); }
-                }
-            `}</style>
+
         </div>
     );
 };
