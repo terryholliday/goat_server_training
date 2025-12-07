@@ -3,6 +3,7 @@ import type { Flashcard as FlashcardType, FlashcardDeck } from '../types/enhance
 import { Button } from './Button';
 import { ProgressBar } from './ProgressBar';
 import { SectionWrapper } from './SectionWrapper';
+import { SafeImage } from './SafeImage';
 
 interface FlashcardProps {
     card: FlashcardType;
@@ -35,7 +36,7 @@ const FlashcardCard: React.FC<FlashcardProps> = ({ card, isFlipped, onFlip }) =>
                 >
                     {card.front.image && (
                         <div className="w-full h-40 mb-4 overflow-hidden rounded-lg bg-white/50 flex items-center justify-center">
-                            <img
+                            <SafeImage
                                 src={card.front.image}
                                 alt={card.front.title}
                                 className="w-full h-full object-contain"

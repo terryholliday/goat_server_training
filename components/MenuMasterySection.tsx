@@ -13,7 +13,7 @@ interface MenuMasterySectionProps {
 
 type ViewMode = 'menu' | 'learn' | 'flashcards' | 'practice';
 
-const BASE_IMG_PATH = "/french_goat_images/";
+const BASE_IMG_PATH = "/";
 
 // Convert menu items to flashcards
 const createMenuFlashcards = (): FlashcardDeck => {

@@ -213,7 +213,7 @@ export const MENU_KNOWLEDGE_PAGES: InfoPage[] = [
   },
   {
     title: "Brunch: Starters & Egg Specialties",
-    content: "Brunch at The French Goat is a weekend highlight, featuring both light starters and classic egg dishes.\n\n**Starters**\n*   **Bread Basket ($12)**: A basket of freshly baked croissant, pastry, and chocolate croissant.\n*   **Onion Soup ($12)**: with crostini, gruyère, and baby swiss.\n*   **Soup of the Day ($11)**: Chef's soup of the day.\n*   **Oysters on the Halfshell ($19)**: Half dozen seasonal oysters.\n*   **Sautéed Mussels Mouclade ($16)**: with leek, white wine, saffron, curry, crème fraîche, and grilled baguette.\n*   **Roasted Red Pepper & Walnut Dip ($16)**: with sheep's milk feta, assorted local breads and crackers.\n*   **Escargot Traditional ($15)**: with lemon parsley garlic butter and grilled bread.\n*   **Lump Crab & Macaroni Gratin ($18)**: with caper-lemon béchamel, sharp cheddar, gruyère, and parmesan.\n\n**Egg Specialties**\n*   **House Omelet ($15)**: Chef's seasonal omelet.\n*   **House Quiche ($14)**: Quiche of the day, served with salad or frites."
+    content: "Brunch at The French Goat is a weekend highlight, featuring both light starters and classic egg dishes.\n\n**Starters**\n*   **Bread Basket ($12)**: A basket of freshly baked croissant, pastry, and chocolate croissant.\n*   **Onion Soup ($12)**: with crostini, gruyère, and baby swiss.\n*   **Soup of the Day ($11)**: Chef's soup of the day.\n*   **Oysters on the Halfshell ($19)**: Half dozen seasonal oysters.\n*   **Sautéed Mussels Mouclade ($16)**: with leek, white wine, saffron, curry, crème fraîche, and grilled baguette.\n*   **Escargot Traditional ($15)**: with lemon parsley garlic butter and grilled bread.\n*   **Lump Crab & Macaroni Gratin ($18)**: with caper-lemon béchamel, sharp cheddar, gruyère, and parmesan.\n\n**Egg Specialties**\n*   **House Omelet ($15)**: Chef's seasonal omelet.\n*   **House Quiche ($14)**: Quiche of the day, served with salad or frites."
   },
   {
     title: "Brunch: Main Dishes & Salads",
@@ -245,7 +245,7 @@ export const WINE_KNOWLEDGE_PAGES: InfoPage[] = [
 export const MENU_QUIZ: MCQ[] = [
   { q: 'What accompanies the Seared Hamachi?', options: ['Lemon parsley garlic butter', 'Harissa aioli, pickled fennel, navel orange', 'Sultana chutney', 'Sheep\'s milk feta'], correctIndex: 1 },
   { q: 'What are the main components of the Duck Leg Confit?', options: ['Potato pave and asparagus', 'Truffle fries and aioli', 'Braised lentils, frisée, carrot-lemongrass coulis', 'Heirloom tomatoes and pecorino'], correctIndex: 2 },
-  { q: 'Which side is available at brunch but NOT dinner?', options: ['Truffle Frites', 'Fondant Potatoes', 'Arbaugh Farms Cheese Grits', 'Glazed Asparagus'], correctIndex: 2 },
+  { q: 'Which side is available at brunch but NOT dinner?', options: ['Truffle Frites', 'Whipped Potato Subise', 'Arbaugh Farms Cheese Grits', 'Roasted Baby Carrots'], correctIndex: 2 },
   { q: 'What is served with the French Toast?', options: ['Berries and whipped cream', 'House-made ricotta, bacon, maple syrup', 'Fried chicken', 'Caramelized bananas'], correctIndex: 1 },
   { q: 'The Croque Madame is topped with what type of egg?', options: ['Poached', 'Scrambled', 'Fried hen egg', 'Boiled'], correctIndex: 2 },
   { q: 'What sauce is served with traditional Eggs Benedict?', options: ['Mornay', 'Béarnaise', 'Velouté', 'Hollandaise'], correctIndex: 3 },
