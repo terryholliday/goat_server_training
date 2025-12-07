@@ -62,10 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
 
     // Initialize - no auto-login to allow testing login screen
     useEffect(() => {
-        // Initialize - no auto-login to allow testing login screen
-        useEffect(() => {
-            setLoading(false);
-        }, []);
+        setLoading(false);
     }, []);
 
     const login = useCallback(async (email: string, password: string): Promise<void> => {
