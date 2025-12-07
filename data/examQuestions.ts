@@ -177,23 +177,13 @@ export const SERVICE_MCQ: MCQQuestion[] = [
 
 export const MENU_MCQ: MCQQuestion[] = [
     {
-        id: 'menu-1',
-        type: 'mcq',
-        difficulty: 'medium',
-        category: 'Menu',
-        points: 2,
-        question: 'What accompanies the Seared Hamachi?',
-        options: ['Lemon parsley garlic butter', 'Harissa aioli, pickled fennel, navel orange', 'Sultana chutney', 'Sheep\'s milk feta'],
-        correctIndex: 1
-    },
-    {
         id: 'menu-2',
         type: 'mcq',
         difficulty: 'medium',
         category: 'Menu',
         points: 2,
         question: 'What are the main components of the Duck Leg Confit?',
-        options: ['Potato pave and asparagus', 'Truffle fries and aioli', 'Braised lentils, frisée, carrot-lemongrass coulis', 'Heirloom tomatoes and pecorino'],
+        options: ['Potato pave and asparagus', 'Truffle fries and aioli', 'Braised red cabbage, marrow beans, pickled green apple', 'Heirloom tomatoes and pecorino'],
         correctIndex: 2
     },
     {
@@ -242,8 +232,8 @@ export const MENU_MCQ: MCQQuestion[] = [
         difficulty: 'easy',
         category: 'Menu',
         points: 1,
-        question: 'What type of steak is used for Steak Frites?',
-        options: ['Ribeye', 'Filet Mignon', 'Coulotte', 'New York Strip'],
+        question: 'Which aioli is served with the Steak Frites?',
+        options: ['Garlic', 'Lemon', 'Malt Vinegar', 'Truffle'],
         correctIndex: 2
     },
     {
@@ -498,7 +488,7 @@ export const ALLERGY_MCQ: MCQQuestion[] = [
         category: 'Allergies',
         points: 3,
         question: 'A guest asks for a nut-free appetizer. Which should you NOT recommend?',
-        options: ['Oysters on the Halfshell', 'Seared Hamachi', 'Roasted Red Pepper & Walnut Dip', 'Escargot Traditional'],
+        options: ['Oysters on the Halfshell', 'Tarte Flambée', 'Roasted Red Pepper & Walnut Dip', 'Escargot Traditional'],
         correctIndex: 2
     },
     {

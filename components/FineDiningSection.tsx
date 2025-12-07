@@ -22,7 +22,6 @@ const FINE_DINING_STEPS = [
         title: "Napkin Etiquette",
         content: `The napkin is a silent signal of the guest's status.
 
-*   **Guest Leaves Temporarily**: If a guest stands up (e.g., for the restroom), neatly fold their napkin and place it on the arm of their chair or the seat (if no arms). This signals to other staff that the guest is returning.
 *   **Guest Departs**: When the guest leaves for good, the napkin stays on the table.
 *   **Dropped Napkin**: If a guest drops a napkin, immediately pick it up and replace it with a fresh one from your service tray. Do not place the dirty napkin back on the table.`,
         image: IMAGE_MAP.sequencePages[2] // Seating image

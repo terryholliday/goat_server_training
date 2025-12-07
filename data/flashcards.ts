@@ -30,26 +30,7 @@ export const MENU_FLASHCARDS: Flashcard[] = [
         },
         difficulty: 'easy', tags: ['vegetarian', 'starter']
     },
-    {
-        id: 'fc-fig-flatbread', category: 'menu',
-        front: { title: 'Fig & Chèvre Flatbread', subtitle: '$16 • Vegetarian' },
-        back: {
-            mainContent: 'Naan with walnut butter, red onion marmalade, kalamata, pecorino, fig gastrique.',
-            pronunciation: 'SHEV-ruh (chèvre)',
-            bulletPoints: ['Allergens: Gluten, Dairy, Nuts', 'Pair: DAOU Chardonnay']
-        },
-        difficulty: 'medium', tags: ['vegetarian', 'starter']
-    },
-    {
-        id: 'fc-hamachi', category: 'menu',
-        front: { title: 'Seared Hamachi', subtitle: '$22 • Petite Plate' },
-        back: {
-            mainContent: 'Sashimi-grade yellowtail with harissa aioli, pickled fennel, orange, smoked chili oil.',
-            pronunciation: 'hah-MAH-chee',
-            bulletPoints: ['Allergens: Fish, Eggs', 'Pair: Dom. Paul Buisse Sauvignon Blanc']
-        },
-        difficulty: 'medium', tags: ['seafood', 'dinner-only']
-    },
+
     {
         id: 'fc-mussels', category: 'menu',
         front: { title: 'Sautéed Mussels Mouclade', subtitle: '$16' },
@@ -120,9 +101,9 @@ export const MENU_FLASHCARDS: Flashcard[] = [
     },
     {
         id: 'fc-steak-frites', category: 'menu',
-        front: { title: 'Steak Frites', subtitle: '$38 • Main' },
+        front: { title: 'Steak Frites', subtitle: '$38 / $62 • Main' },
         back: {
-            mainContent: 'Sliced coulotte steak with truffle marrow butter, truffle frites, malt vinegar aioli.',
+            mainContent: 'Choice of Coulotte Sirloin ($38) or Beef Tenderloin ($62) with truffle marrow butter, truffle frites, malt vinegar aioli.',
             pronunciation: 'koo-LOT, FREET',
             bulletPoints: ['Allergens: Dairy, Eggs', 'GF', 'Pair: DAOU Cabernet or Catena Malbec']
         },
@@ -132,8 +113,8 @@ export const MENU_FLASHCARDS: Flashcard[] = [
         id: 'fc-duck', category: 'menu',
         front: { title: 'Duck Leg Confit', subtitle: '$36 • Main' },
         back: {
-            mainContent: 'Duck leg (6 hrs in duck fat) with cardamom apricot, green lentils, frisée, carrot-lemongrass coulis.',
-            pronunciation: 'kon-FEE, free-ZAY, koo-LEE',
+            mainContent: 'Duck leg (slow-cooked/cured) with braised red cabbage, marrow beans, pickled green apple, mustard-cider duck jus.',
+            pronunciation: 'kon-FEE',
             bulletPoints: ['No common allergens', 'GF', 'Pair: Louis Jadot Chorey-Les-Beaune']
         },
         difficulty: 'hard', tags: ['french-classic', 'main']
@@ -237,24 +218,13 @@ export const MENU_FLASHCARDS: Flashcard[] = [
         difficulty: 'medium', tags: ['brunch', 'steak']
     },
     {
-        id: 'fc-sorbet', category: 'menu',
-        front: { title: 'Sorbet', subtitle: '$9 • Dessert' },
+        id: 'fc-plat-du-jour', category: 'menu',
+        front: { title: 'Chefs Plat du jour', subtitle: '$16 • Brunch' },
         back: {
-            mainContent: 'House-made seasonal sorbet. Dairy-free.',
-            pronunciation: 'sor-BAY',
-            bulletPoints: ['Vegan', 'GF', 'Changes Daily']
+            mainContent: 'Our daily specialty.',
+            bulletPoints: ['Ask chef for details', 'Seasonal', 'Changes Daily']
         },
-        difficulty: 'easy', tags: ['dessert', 'vegan']
-    },
-    {
-        id: 'fc-gelato', category: 'menu',
-        front: { title: 'Gelato', subtitle: '$9 • Dessert' },
-        back: {
-            mainContent: 'House-made Italian-style ice cream. Denser and creamier.',
-            pronunciation: 'jeh-LAH-toh',
-            bulletPoints: ['Allergens: Dairy', 'GF', 'Changes Daily']
-        },
-        difficulty: 'easy', tags: ['dessert']
+        difficulty: 'easy', tags: ['brunch', 'special']
     }
 ];
 
@@ -263,7 +233,7 @@ export const WINE_FLASHCARDS: Flashcard[] = [
     { id: 'fc-wine-montand', category: 'wine', front: { title: 'Montand Brut Rosé', subtitle: 'Sparkling • Jura' }, back: { mainContent: 'Sparkling rosé - strawberry, raspberry, fine bubbles, crisp.', pronunciation: 'mohn-TAHND', bulletPoints: ['Pairs: Oysters, Eggs Benedict'] }, difficulty: 'easy', tags: ['sparkling'] },
     { id: 'fc-wine-rubus', category: 'wine', front: { title: 'Rubus Blanc de Blancs', subtitle: 'Sparkling' }, back: { mainContent: '100% Chardonnay. Green apple, pear, citrus, brioche.', pronunciation: 'blahnk duh BLAHNK', bulletPoints: ['Blanc de Blancs = white from white grapes'] }, difficulty: 'medium', tags: ['sparkling'] },
     { id: 'fc-wine-fleurs', category: 'wine', front: { title: 'Fleurs de Prairie', subtitle: 'Rosé • Provence' }, back: { mainContent: 'Classic Provence rosé - red berries, citrus, floral.', pronunciation: 'flur duh pray-REE', bulletPoints: ['Provence = rosé benchmark'] }, difficulty: 'easy', tags: ['rosé'] },
-    { id: 'fc-wine-buisse', category: 'wine', front: { title: 'Dom. Paul Buisse Sauvignon Blanc', subtitle: 'Loire Valley' }, back: { mainContent: 'Crisp Loire white - green apple, citrus, mineral.', pronunciation: 'boo-EES', bulletPoints: ['Pairs: Hamachi, Risotto'] }, difficulty: 'medium', tags: ['white'] },
+    { id: 'fc-wine-buisse', category: 'wine', front: { title: 'Dom. Paul Buisse Sauvignon Blanc', subtitle: 'Loire Valley' }, back: { mainContent: 'Crisp Loire white - green apple, citrus, mineral.', pronunciation: 'boo-EES', bulletPoints: ['Pairs: Risotto, Goat Cheese'] }, difficulty: 'medium', tags: ['white'] },
     { id: 'fc-wine-jadot-chard', category: 'wine', front: { title: 'Louis Jadot Chardonnay', subtitle: 'Burgundy' }, back: { mainContent: 'Premier Burgundy - apple, pear, balanced oak.', pronunciation: 'loo-EE zhah-DOH', bulletPoints: ['Pairs: Salmon, Mussels, Chicken'] }, difficulty: 'easy', tags: ['white'] },
     { id: 'fc-wine-daou-chard', category: 'wine', front: { title: 'DAOU Chardonnay', subtitle: 'Paso Robles' }, back: { mainContent: 'Rich California - tropical, vanilla, creamy.', pronunciation: 'DOW', bulletPoints: ['Pairs: Fig Flatbread'] }, difficulty: 'easy', tags: ['white'] },
     { id: 'fc-wine-belle-glos', category: 'wine', front: { title: 'Belle Glos Pinot Noir', subtitle: 'Santa Barbara' }, back: { mainContent: 'Full-bodied Pinot - dark cherry, vanilla, spice.', pronunciation: 'bell GLOH', bulletPoints: ['Fuller than typical Pinot'] }, difficulty: 'medium', tags: ['red'] },
@@ -280,7 +250,7 @@ export const CULINARY_TERMS_FLASHCARDS: Flashcard[] = [
     { id: 'fc-term-veloute', category: 'term', front: { title: 'Velouté', subtitle: 'Mother Sauce', image: getImg('food9.jpg') }, back: { mainContent: 'Stock-based sauce thickened with roux.', pronunciation: 'veh-loo-TAY', bulletPoints: ['Used: Chicken, Salmon'] }, difficulty: 'medium', tags: ['sauce'] },
     { id: 'fc-term-mornay', category: 'term', front: { title: 'Mornay', subtitle: 'Sauce', image: getImg('food3.jpeg') }, back: { mainContent: 'Béchamel + gruyère cheese.', pronunciation: 'mor-NAY', bulletPoints: ['Used: Croque Madame'] }, difficulty: 'medium', tags: ['sauce'] },
     { id: 'fc-term-hollandaise', category: 'term', front: { title: 'Hollandaise', subtitle: 'Mother Sauce', image: getImg('food5.jpeg') }, back: { mainContent: 'Egg yolk + butter + lemon emulsion.', pronunciation: 'hol-un-DAYZ', bulletPoints: ['Used: Eggs Benedict'] }, difficulty: 'easy', tags: ['sauce'] },
-    { id: 'fc-term-coulis', category: 'term', front: { title: 'Coulis', subtitle: 'Sauce', image: getImg('food7.jpeg') }, back: { mainContent: 'Puréed/strained vegetable or fruit sauce.', pronunciation: 'koo-LEE', bulletPoints: ['Used: Duck (carrot-lemongrass)'] }, difficulty: 'medium', tags: ['sauce'] },
+    { id: 'fc-term-coulis', category: 'term', front: { title: 'Coulis', subtitle: 'Sauce', image: getImg('food7.jpeg') }, back: { mainContent: 'Puréed/strained vegetable or fruit sauce.', pronunciation: 'koo-LEE', bulletPoints: ['Used: Garnish/Desserts'] }, difficulty: 'medium', tags: ['sauce'] },
     { id: 'fc-term-pave', category: 'term', front: { title: 'Pavé', subtitle: 'Term', image: getImg('food6.jpeg') }, back: { mainContent: '"Cobblestone" - layered, pressed, sliced.', pronunciation: 'pah-VAY', bulletPoints: ['Used: Salmon (potato pavé)'] }, difficulty: 'hard', tags: ['technique'] },
     { id: 'fc-term-fondant', category: 'term', front: { title: 'Fondant Potatoes', subtitle: 'Side', image: getImg('food4.jpeg') }, back: { mainContent: 'Seared, then braised in butter/stock.', pronunciation: 'fon-DAHN', bulletPoints: ['Crispy outside, creamy inside'] }, difficulty: 'medium', tags: ['potato'] },
     { id: 'fc-term-ragout', category: 'term', front: { title: 'Ragoût', subtitle: 'Stew', image: getImg('food2.jpeg') }, back: { mainContent: 'Slow-cooked vegetable/meat stew.', pronunciation: 'ra-GOO', bulletPoints: ['Used: Chicken (mushroom)'] }, difficulty: 'easy', tags: ['technique'] },

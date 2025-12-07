@@ -46,43 +46,7 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         isVegetarian: true,
         serviceTime: 'both'
     },
-    {
-        id: 'fig-chevre-flatbread',
-        name: 'Fig & Chèvre Flatbread',
-        category: 'petite-plate',
-        price: 16,
-        description: 'Warm naan topped with walnut butter, red onion marmalade, kalamata olives, pecorino, and finished with a fig gastrique.',
-        ingredients: ['naan bread', 'walnut butter', 'red onion marmalade', 'chèvre', 'kalamata olives', 'pecorino', 'fig gastrique'],
-        allergens: ['gluten', 'dairy', 'nuts'],
-        substitutions: [
-            { forAllergen: 'gluten', substitute: 'Not available gluten-free', notes: 'Naan is essential to the dish' }
-        ],
-        chefStory: 'This flatbread celebrates the classic pairing of figs and goat cheese. The red onion marmalade is made in-house with local onions, slowly caramelized with balsamic and a touch of honey.',
-        pronunciation: 'Fig and SHEV-ruh Flatbread',
-        upsellPairings: [
-            { type: 'wine', itemName: 'DAOU Chardonnay', suggestedScript: 'The creamy texture of our California Chardonnay complements the rich chèvre beautifully.' }
-        ],
-        flavorNotes: ['sweet', 'tangy', 'savory', 'caramelized'],
-        isVegetarian: true,
-        serviceTime: 'dinner'
-    },
-    {
-        id: 'seared-hamachi',
-        name: 'Seared Hamachi',
-        category: 'petite-plate',
-        price: 22,
-        description: 'Perfectly seared yellowtail with harissa aioli, pickled fennel, navel orange segments, and smoked chili oil.',
-        ingredients: ['hamachi (yellowtail)', 'harissa aioli', 'fennel', 'navel orange', 'smoked chili oil', 'microgreens'],
-        allergens: ['fish', 'eggs'],
-        substitutions: [],
-        chefStory: 'Our hamachi is sashimi-grade, seared just enough to create a caramelized exterior while keeping the interior silky and cool. The harissa brings North African warmth balanced by the bright citrus.',
-        pronunciation: 'Seared hah-MAH-chee',
-        upsellPairings: [
-            { type: 'wine', itemName: 'Dom. Paul Buisse Sauvignon Blanc', suggestedScript: 'The zesty citrus notes in this Loire Valley white echo the orange in the dish perfectly.' }
-        ],
-        flavorNotes: ['buttery', 'spicy', 'citrus', 'smoky'],
-        serviceTime: 'dinner'
-    },
+
     {
         id: 'mussels-mouclade',
         name: 'Sautéed Mussels Mouclade',
@@ -169,8 +133,8 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         id: 'crab-macaroni-gratin',
         name: 'Lump Crab & Macaroni Gratin',
         category: 'petite-plate',
-        price: 22,
-        preparationNotes: 'Dinner $22, Brunch $18',
+        price: 18,
+        preparationNotes: 'Dinner $22 (Petite Plate), Brunch $18 (Starter)',
         description: 'Jumbo lump crab with caper-lemon béchamel, sharp cheddar, gruyère, and parmesan.',
         ingredients: ['jumbo lump crab', 'macaroni', 'capers', 'lemon', 'béchamel', 'sharp cheddar', 'gruyère', 'parmesan'],
         allergens: ['shellfish', 'gluten', 'dairy'],
@@ -233,7 +197,8 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         id: 'soup-of-the-day',
         name: 'Soup of the Day',
         category: 'soup',
-        price: 11,
+        price: 12,
+        preparationNotes: 'Dinner $12, Brunch $11',
         description: 'Chef\'s daily crafted soup made with seasonal ingredients.',
         ingredients: ['seasonal vegetables', 'house-made stock', 'herbs'],
         allergens: [],
@@ -650,41 +615,6 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         isGlutenFree: true,
         serviceTime: 'both'
     },
-    {
-        id: 'sorbet',
-        name: 'Sorbet',
-        category: 'dessert',
-        price: 9,
-        description: 'House-made seasonal sorbet (Changes Daily).',
-        ingredients: ['fruit juice', 'sugar', 'water'],
-        allergens: [],
-        substitutions: [],
-        chefStory: 'Refreshing and dairy-free, our sorbets are churned daily using the freshest seasonal fruits.',
-        pronunciation: 'sor-BAY',
-        upsellPairings: [],
-        flavorNotes: ['fruit-forward', 'refreshing', 'icy'],
-        isVegetarian: true,
-        isVegan: true,
-        isGlutenFree: true,
-        serviceTime: 'both'
-    },
-    {
-        id: 'gelato',
-        name: 'Gelato',
-        category: 'dessert',
-        price: 9,
-        description: 'House-made gelato (Changes Daily).',
-        ingredients: ['milk', 'cream', 'sugar', 'flavorings'],
-        allergens: ['dairy'],
-        substitutions: [],
-        chefStory: 'Our gelato is made in the Italian tradition—denser and smoother than ice cream, with intense flavor clarity.',
-        pronunciation: 'jeh-LAH-toh',
-        upsellPairings: [],
-        flavorNotes: ['creamy', 'dense', 'rich'],
-        isVegetarian: true,
-        isGlutenFree: true,
-        serviceTime: 'both'
-    },
 
     // ============================================
     // SIDES
@@ -707,44 +637,6 @@ export const ENHANCED_MENU_ITEMS: EnhancedMenuItem[] = [
         isVegetarian: true,
         isGlutenFree: true,
         serviceTime: 'both'
-    },
-    {
-        id: 'fondant-potatoes',
-        name: 'Fondant Potatoes',
-        category: 'side',
-        price: 10,
-        description: 'Butter-poached potatoes with a golden, crispy exterior and creamy, melt-in-your-mouth interior.',
-        ingredients: ['Yukon gold potatoes', 'butter', 'chicken stock', 'thyme', 'garlic'],
-        allergens: ['dairy'],
-        substitutions: [
-            { forAllergen: 'dairy', substitute: 'Request olive oil preparation', notes: 'May alter traditional texture' }
-        ],
-        chefStory: 'Fondant potatoes are a test of technique—seared on both sides until golden, then slowly braised in butter and stock until they melt on your tongue. It\'s the ultimate potato experience.',
-        pronunciation: 'fon-DAHN',
-        upsellPairings: [],
-        flavorNotes: ['buttery', 'creamy', 'crispy edges', 'rich'],
-        isVegetarian: false,
-        isGlutenFree: true,
-        serviceTime: 'dinner'
-    },
-    {
-        id: 'glazed-asparagus',
-        name: 'Glazed Asparagus',
-        category: 'side',
-        price: 12,
-        description: 'Fresh asparagus spears glazed with lemon butter and topped with toasted almonds.',
-        ingredients: ['asparagus', 'butter', 'lemon', 'almonds'],
-        allergens: ['dairy', 'nuts'],
-        substitutions: [
-            { forAllergen: 'nuts', substitute: 'Omit almonds', notes: 'Served without topping' },
-            { forAllergen: 'dairy', substitute: 'Olive oil and lemon', notes: 'Request dairy-free preparation' }
-        ],
-        chefStory: 'We source the freshest asparagus available and cook them just until bright green and tender-crisp. The lemon butter glaze adds richness while the almonds provide a satisfying crunch.',
-        upsellPairings: [],
-        flavorNotes: ['bright', 'buttery', 'crisp', 'nutty'],
-        isVegetarian: true,
-        isGlutenFree: true,
-        serviceTime: 'dinner'
     },
     {
         id: 'cheese-grits',

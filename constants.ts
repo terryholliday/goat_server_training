@@ -99,7 +99,7 @@ export const SEQUENCE_OF_SERVICE: SequenceStep[] = [
   },
   {
     title: "3. Greeting and Seating",
-    content: "The first impression sets the tone for the entire dining experience. Greet guests warmly within 30 seconds of their arrival, make eye contact, and introduce yourself by name.\n\nOffer to take coats if appropriate, and guide them to their table with confidence. Ensure chairs are pulled out for guests and napkins are placed on their laps as they are seated."
+    content: "The first impression sets the tone for the entire dining experience. Greet guests warmly within 30 seconds of their arrival, make eye contact, and introduce yourself by name.\n\nOffer to take coats if appropriate, and guide them to their table with confidence. Ensure chairs are pulled out for guests."
   },
   {
     title: "4. Presenting Menus & Taking Beverage Orders",
@@ -138,7 +138,6 @@ export const SERVICE_QUIZ: MCQ[] = [
   { q: "When should you perform a check-back after guests have begun their entrées?", options: ["Immediately after serving", "1 minute after serving", "2-3 minutes after serving", "5 minutes after serving"], correctIndex: 2 },
   { q: "When serving food, from which side should you generally approach the guest?", options: ["Always from the right", "Always from the left", "Approach from the left and serve from the right", "Approach from the right and serve from the left"], correctIndex: 2 },
   { q: "What does 'Mise en Place' refer to in the context of service?", options: ["The final check presentation", "The guest seating chart", "Pre-service preparation and station stocking", "The dessert menu"], correctIndex: 2 },
-  { q: "What is a key action during the 'Greeting and Seating' step?", options: ["Asking for the order immediately", "Placing napkins on guests' laps", "Presenting the check", "Rushing them to the table"], correctIndex: 1 },
   { q: "What should be done with special requests or allergies when taking an order?", options: ["Ignored if they seem minor", "Communicated clearly to the kitchen", "Handled by the server alone", "Discouraged"], correctIndex: 1 },
   { q: "When is the most appropriate time to present the check?", options: ["As soon as the main course is cleared", "With the dessert menu", "Only when requested or the meal has clearly concluded", "Five minutes after dessert is served"], correctIndex: 2 },
   { q: "What is an important post-service duty?", options: ["Leaving immediately after your last table pays", "Completing all assigned side work", "Discussing tips with other servers", "Taking a break"], correctIndex: 1 }
@@ -209,7 +208,7 @@ export const MENU_KNOWLEDGE_PAGES: InfoPage[] = [
   },
   {
     title: "Dinner: Main Courses",
-    content: "Our main courses showcase classic French techniques with high-quality ingredients.\n\n**Pan Seared Salmon ($44)**: with parsnip-green grape purée, haricots verts, golden raisins, verjus, sourdough crouton, and caper brown butter.\n\n**Roasted Root Vegetable Risotto ($35)**: with celeriac apple slaw, pecorino, sage, and brown butter.\n\n**French Goat Burger ($22)**: A blend of ground short rib and tenderloin with Cabot sharp cheddar, bacon jam, pickled shallots, whole grain mustard aioli, arugula, on a local asiago bun with truffle fries.\n\n**Steak Frites**: Coulotte Sirloin ($38) or Tenderloin of Beef ($62) with truffle marrow butter, truffle frites, and malt vinegar aioli.\n\n**Duck Leg Confit ($36)**: with braised red cabbage, marrow beans, pickled green apple, and mustard-cider duck jus.\n\n**Pan Roasted Chicken Breast ($36)**: Joyce Farms chicken breast with whipped potato subise, roasted baby carrots, glazed turnips, and creamy porcini-madeira chicken jus.\n\n**Tuna Niçoise Salad ($33)**: Salad of seared ahi tuna, baby greens, haricot verts, boiled egg, sundried tomato, roasted fingerlings, calamata olives, and balsamic vinaigrette."
+    content: "Our main courses showcase classic French techniques with high-quality ingredients.\n\n**Pan Seared Salmon ($44)**: with parsnip-green grape purée, haricots verts, golden raisins, verjus, sourdough crouton, and caper brown butter.\n\n**Roasted Root Vegetable Risotto ($35)**: with celeriac apple slaw, pecorino, sage, and brown butter.\n\n**French Goat Burger ($22)**: A blend of ground short rib and tenderloin with Cabot sharp cheddar, bacon jam, pickled shallots, whole grain mustard aioli, arugula, on a local asiago bun with truffle fries.\n\n**Steak Frites**: Coulotte Sirloin ($38) or Tenderloin of Beef ($62) with truffle marrow butter, truffle frites, and malt vinegar aioli.\n\n**Duck Leg Confit ($36)**: with braised red cabbage, marrow beans, pickled green apple, and mustard-cider duck jus.\n\n**Pan Roasted Chicken Breast ($36)**: Joyce Farms chicken breast with whipped potato subise, roasted baby carrots, glazed turnips, and creamy porcini-madeira chicken jus."
   },
   {
     title: "Brunch: Starters & Egg Specialties",
@@ -243,13 +242,12 @@ export const WINE_KNOWLEDGE_PAGES: InfoPage[] = [
 ];
 
 export const MENU_QUIZ: MCQ[] = [
-  { q: 'What accompanies the Seared Hamachi?', options: ['Lemon parsley garlic butter', 'Harissa aioli, pickled fennel, navel orange', 'Sultana chutney', 'Sheep\'s milk feta'], correctIndex: 1 },
-  { q: 'What are the main components of the Duck Leg Confit?', options: ['Potato pave and asparagus', 'Truffle fries and aioli', 'Braised lentils, frisée, carrot-lemongrass coulis', 'Heirloom tomatoes and pecorino'], correctIndex: 2 },
+  { q: 'What are the main components of the Duck Leg Confit?', options: ['Potato pave and asparagus', 'Truffle fries and aioli', 'Braised red cabbage, marrow beans, pickled green apple', 'Heirloom tomatoes and pecorino'], correctIndex: 2 },
   { q: 'Which side is available at brunch but NOT dinner?', options: ['Truffle Frites', 'Whipped Potato Subise', 'Arbaugh Farms Cheese Grits', 'Roasted Baby Carrots'], correctIndex: 2 },
   { q: 'What is served with the French Toast?', options: ['Berries and whipped cream', 'House-made ricotta, bacon, maple syrup', 'Fried chicken', 'Caramelized bananas'], correctIndex: 1 },
   { q: 'The Croque Madame is topped with what type of egg?', options: ['Poached', 'Scrambled', 'Fried hen egg', 'Boiled'], correctIndex: 2 },
   { q: 'What sauce is served with traditional Eggs Benedict?', options: ['Mornay', 'Béarnaise', 'Velouté', 'Hollandaise'], correctIndex: 3 },
-  { q: 'What type of steak is used for Steak Frites?', options: ['Ribeye', 'Filet Mignon', 'Coulotte', 'New York Strip'], correctIndex: 2 },
+  { q: 'Which aioli is served with the Steak Frites?', options: ['Garlic', 'Lemon', 'Malt Vinegar', 'Truffle'], correctIndex: 2 },
   { q: 'The Sautéed Mussels Mouclade includes which spice that gives it warmth?', options: ['Paprika', 'Curry', 'Cumin', 'Turmeric'], correctIndex: 1 },
   { q: 'Where does The French Goat source its chicken from?', options: ['Tyson Farms', 'Perdue', 'Joyce Farms', 'Bell & Evans'], correctIndex: 2 },
   { q: 'Which local farm provides our stone-ground grits?', options: ['Smith Creek Farm', 'Arbaugh Farms', 'Mountain Valley', 'Green Valley'], correctIndex: 1 }
@@ -270,7 +268,6 @@ export const WINE_QUIZ: MCQ[] = [
 // ... existing exports ...
 
 export const FINE_DINING_QUIZ: MCQ[] = [
-  { q: "Where should you place a guest's napkin if they leave the table temporarily?", options: ["On the table", "On their chair seat or arm", "Take it to the kitchen", "Fold it into a swan"], correctIndex: 1 },
   { q: "What is the 'Sullivan Nod'?", options: ["A way to signal the kitchen", "A slight nod while suggesting an item to encourage agreement", "A bow to the guest upon arrival", "Shaking your head to indicate an item is 86'd"], correctIndex: 1 },
   { q: "When pouring wine, who should be served first?", options: [" The host", "The men", "The ladies", "Whoever is closest"], correctIndex: 2 },
   { q: "What should you do if a guest drops their napkin?", options: ["Pick it up and put it back on the table", "Ignore it until the end of the meal", "Pick it up and provide a fresh one immediately", "Kick it under the table"], correctIndex: 2 },
