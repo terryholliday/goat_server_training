@@ -63,9 +63,9 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
     // Initialize - auto-login in demo mode
     useEffect(() => {
         if (DEMO_MODE) {
-            // Auto-login with demo user
-            setUser(DEMO_USER);
-            setUserProfile(DEMO_PROFILE);
+            // Auto-login removed to restore login screen
+            // setUser(DEMO_USER);
+            // setUserProfile(DEMO_PROFILE);
             setLoading(false);
         } else {
             // Firebase auth would go here
@@ -113,9 +113,9 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
     const logout = useCallback(async (): Promise<void> => {
         setError(null);
         if (DEMO_MODE) {
-            // In demo mode, just re-login immediately
-            setUser(DEMO_USER);
-            setUserProfile(DEMO_PROFILE);
+            // In demo mode, clearly logout
+            setUser(null);
+            setUserProfile(null);
             return;
         }
         setUser(null);
