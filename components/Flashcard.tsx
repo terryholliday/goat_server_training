@@ -34,11 +34,11 @@ const FlashcardCard: React.FC<FlashcardProps> = ({ card, isFlipped, onFlip }) =>
                     style={{ backfaceVisibility: 'hidden' }}
                 >
                     {card.front.image && (
-                        <div className="w-full h-32 mb-4 overflow-hidden rounded-lg">
+                        <div className="w-full h-40 mb-4 overflow-hidden rounded-lg bg-white/50 flex items-center justify-center">
                             <img
                                 src={card.front.image}
                                 alt={card.front.title}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-contain"
                             />
                         </div>
                     )}

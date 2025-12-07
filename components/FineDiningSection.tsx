@@ -72,11 +72,11 @@ export const FineDiningSection: React.FC<FineDiningSectionProps> = ({ onComplete
                             {data.content}
                         </div>
                     </div>
-                    <div className="relative h-64 md:h-80 rounded-lg overflow-hidden shadow-lg">
+                    <div className="relative rounded-lg overflow-hidden shadow-lg bg-slate-50 dark:bg-zinc-800 flex items-center justify-center p-2">
                         <SafeImage
                             src={data.image || IMAGE_MAP.fallback}
                             alt={data.title}
-                            className="w-full h-full object-cover"
+                            className="w-full max-h-80 object-contain mx-auto"
                         />
                     </div>
                 </div>
