@@ -39,11 +39,11 @@ export const TermsSection: React.FC<TermsSectionProps> = ({ onComplete }) => {
         {currentTerms.map((term, idx) => (
           <div key={idx} className="bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-700 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             {term.image && (
-              <div className="h-40 w-full overflow-hidden">
+              <div className="h-48 w-full overflow-hidden bg-slate-50 dark:bg-zinc-800 flex items-center justify-center p-2">
                 <img
                   src={term.image}
                   alt={term.term}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';
                   }}
