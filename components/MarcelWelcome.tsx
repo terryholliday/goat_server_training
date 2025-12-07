@@ -27,8 +27,8 @@ export const MarcelWelcome: React.FC<MarcelWelcomeProps> = ({ onDismiss }) => {
                     <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl mx-auto mb-6 bg-white overflow-hidden">
                         <img src="/marcel-happy.png" alt="Marcel" className="w-full h-full object-cover" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2 font-serif">Bonjour! I am Marcel.</h2>
-                    <p className="text-indigo-600 font-medium mb-6">Your personal guide to The French Goat</p>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2 font-serif">Bonjour! I am Marcel, your virtual maitre d'.</h2>
+                    <p className="text-indigo-600 font-medium mb-6">I am here to help you master our menu and service standards.</p>
                     <div className="bg-indigo-50 rounded-xl p-5 mb-8 text-left border border-indigo-100">
                         <p className="text-gray-700 mb-2">Today we will focus on:</p>
                         <ul className="space-y-2">

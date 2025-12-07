@@ -131,10 +131,10 @@ const AppContent: React.FC = () => {
   const handleWelcomeDismiss = () => {
     setShowWelcome(false);
     // Play greeting AFTER user interaction to bypass autoplay policy
-    const script = getRandomScript('login');
-    if (script) {
-      say(script.text, script.audio, 4000);
-    }
+    // const script = getRandomScript('login');
+    // if (script) {
+    //   say(script.text, script.audio, 4000);
+    // }
   };
 
   // Calculate unlocked section based on progress
