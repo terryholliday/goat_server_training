@@ -156,7 +156,7 @@ export const Quiz: React.FC<QuizProps> = ({
 
     return (
       <SectionWrapper title={`${title} — Results`} accent={accent}>
-        <div className="bg-white border rounded-lg p-6 shadow-sm space-y-4 max-h-[80vh] overflow-y-auto">
+        <div className="bg-white border rounded-lg p-6 shadow-sm space-y-4">
           <div
             className={`p-4 rounded-lg ${passed ? 'bg-green-50' : 'bg-rose-50'}`}
             role="alert"

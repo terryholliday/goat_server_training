@@ -1,17 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { cn } from '../lib/utils';
 import {
     Menu,
     History,
     BookOpen,
     Settings,
-    Mic,
-    Image as ImageIcon,
     Send,
     ChevronRight,
-    MoreVertical,
-    Maximize2,
     X,
     Layout,
     MessageSquare
@@ -41,7 +37,6 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
 }) => {
     const [activeMobileTab, setActiveMobileTab] = useState<'sidebar' | 'chat' | 'canvas'>('chat');
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const [inputMessage, setInputMessage] = useState('');
     const [isThinking, setIsThinking] = useState(false); // Simulate AI thinking state
     const chatScrollRef = useRef<HTMLDivElement>(null);
 
@@ -52,20 +47,11 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
         }
     }, [chatHistory]);
 
-    const handleSend = () => {
-        if (!inputMessage.trim()) return;
-        onSendMessage?.(inputMessage);
-        setInputMessage('');
+    const handleSend = (message: string) => { // Updated to accept message
+        onSendMessage?.(message);
         setIsThinking(true);
         // Simmons outcome: Reset thinking after a delay for demo
         setTimeout(() => setIsThinking(false), 2000);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
-        }
     };
 
     // -- Layout Sections --
@@ -126,6 +112,51 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
         </div>
     );
 
+    const ChatInputArea = React.memo(({ onSend, disabled }: { onSend: (msg: string) => void; disabled: boolean }) => {
+        const [inputMessage, setInputMessage] = useState('');
+
+        const handleSend = () => {
+            if (!inputMessage.trim()) return;
+            onSend(inputMessage);
+            setInputMessage('');
+        };
+
+        const handleKeyDown = (e: React.KeyboardEvent) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+            }
+        };
+
+        return (
+            <div className="p-3 border-t border-slate-100 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/50">
+                <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-xl p-2 flex items-end gap-2 focus-within:ring-2 focus-within:ring-indigo-500/30 transition-all shadow-sm">
+                    <textarea
+                        value={inputMessage}
+                        onChange={(e) => setInputMessage(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                        placeholder="Type a message..."
+                        className="flex-1 bg-transparent border-none outline-none text-slate-800 dark:text-slate-100 placeholder-slate-400 resize-none max-h-24 py-2 text-sm"
+                        rows={1}
+                        style={{ minHeight: '36px' }}
+                    />
+                    <button
+                        onClick={handleSend}
+                        disabled={disabled || !inputMessage.trim()}
+                        className={cn(
+                            "p-2 rounded-lg transition-all duration-200",
+                            inputMessage.trim()
+                                ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                                : "bg-slate-100 dark:bg-zinc-800 text-slate-300"
+                        )}
+                    >
+                        <Send size={16} />
+                    </button>
+                </div>
+            </div>
+        );
+    });
+
     const ChatPanel = () => (
         <div className="flex flex-col h-full bg-white dark:bg-zinc-950 border-l border-slate-200 dark:border-zinc-800 shadow-inner">
             {/* Use existing Chat Header Style */}
@@ -165,31 +196,7 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
             </div>
 
             {/* Compact Input Area */}
-            <div className="p-3 border-t border-slate-100 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/50">
-                <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-xl p-2 flex items-end gap-2 focus-within:ring-2 focus-within:ring-indigo-500/30 transition-all shadow-sm">
-                    <textarea
-                        value={inputMessage}
-                        onChange={(e) => setInputMessage(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        placeholder="Type a message..."
-                        className="flex-1 bg-transparent border-none outline-none text-slate-800 dark:text-slate-100 placeholder-slate-400 resize-none max-h-24 py-2 text-sm"
-                        rows={1}
-                        style={{ minHeight: '36px' }}
-                    />
-                    <button
-                        onClick={handleSend}
-                        disabled={!inputMessage.trim()}
-                        className={cn(
-                            "p-2 rounded-lg transition-all duration-200",
-                            inputMessage.trim()
-                                ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                                : "bg-slate-100 dark:bg-zinc-800 text-slate-300"
-                        )}
-                    >
-                        <Send size={16} />
-                    </button>
-                </div>
-            </div>
+            <ChatInputArea onSend={handleSend} disabled={isThinking} />
         </div>
     );
 
@@ -201,7 +208,7 @@ export const TrainingCockpit: React.FC<TrainingCockpitProps> = ({
             />
 
             <div className="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar relative z-0 flex flex-col items-center">
-                <div className="w-full max-w-5xl mx-auto bg-white dark:bg-zinc-950 shadow-sm border border-slate-200 dark:border-zinc-800 min-h-[calc(100vh-2rem)] rounded-xl overflow-hidden">
+                <div className="w-full max-w-5xl mx-auto bg-white dark:bg-zinc-950 shadow-sm border border-slate-200 dark:border-zinc-800 min-h-[calc(100vh-2rem)] rounded-xl">
                     {/* Simulating a "Page" look */}
                     {activeArtifact ? (
                         activeArtifact

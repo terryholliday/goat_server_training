@@ -41,7 +41,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onSwitchToLogin }) => {
     const displayError = validationError || error;
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-[#fdfcf9] dark:bg-zinc-950 relative overflow-hidden px-4 py-8">
+        <div className="min-h-screen w-full flex items-center justify-center bg-[#fdfcf9] dark:bg-zinc-950 relative px-4 py-8">
             {/* Background Effects */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-500/10 blur-3xl opacity-50" />

@@ -60,17 +60,12 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Initialize - auto-login in demo mode
+    // Initialize - no auto-login to allow testing login screen
     useEffect(() => {
-        if (DEMO_MODE) {
-            // Auto-login removed to restore login screen
-            // setUser(DEMO_USER);
-            // setUserProfile(DEMO_PROFILE);
+        // Initialize - no auto-login to allow testing login screen
+        useEffect(() => {
             setLoading(false);
-        } else {
-            // Firebase auth would go here
-            setLoading(false);
-        }
+        }, []);
     }, []);
 
     const login = useCallback(async (email: string, password: string): Promise<void> => {
@@ -79,9 +74,12 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
 
         if (DEMO_MODE) {
             // Demo mode - accept any login
-            setUser({ ...DEMO_USER, email });
-            setUserProfile({ ...DEMO_PROFILE, email });
-            setLoading(false);
+            // Simulate network delay
+            setTimeout(() => {
+                setUser({ ...DEMO_USER, email });
+                setUserProfile({ ...DEMO_PROFILE, email });
+                setLoading(false);
+            }, 800);
             return;
         }
 
@@ -100,9 +98,12 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
 
         if (DEMO_MODE) {
             // Demo mode - accept any signup
-            setUser({ ...DEMO_USER, email, displayName });
-            setUserProfile({ ...DEMO_PROFILE, email, displayName, role });
-            setLoading(false);
+            // Simulate network delay
+            setTimeout(() => {
+                setUser({ ...DEMO_USER, email, displayName });
+                setUserProfile({ ...DEMO_PROFILE, email, displayName, role });
+                setLoading(false);
+            }, 800);
             return;
         }
 
@@ -112,12 +113,7 @@ export function AuthProvider({ children }: AuthProviderProps): React.ReactElemen
 
     const logout = useCallback(async (): Promise<void> => {
         setError(null);
-        if (DEMO_MODE) {
-            // In demo mode, clearly logout
-            setUser(null);
-            setUserProfile(null);
-            return;
-        }
+        // Always clear user on logout
         setUser(null);
         setUserProfile(null);
     }, []);
