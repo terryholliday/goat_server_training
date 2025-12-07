@@ -25,11 +25,13 @@ export const TermsSection: React.FC<TermsSectionProps> = ({ onComplete }) => {
       onComplete();
     } else {
       setPage(p => p + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handleBack = () => {
     setPage(p => p - 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (

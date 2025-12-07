@@ -4,6 +4,7 @@ import { GeneralInfoSection } from './components/GeneralInfoSection';
 import { TermsSection } from './components/TermsSection';
 import { Quiz } from './components/Quiz';
 import { SequenceSection } from './components/SequenceSection';
+import { FineDiningSection } from './components/FineDiningSection';
 
 import { WineKnowledgeSection } from './components/WineKnowledgeSection';
 import { FinalExamSection } from './components/FinalExamSection';

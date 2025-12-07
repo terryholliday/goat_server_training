@@ -71,22 +71,22 @@ export const SCENARIOS: Scenario[] = [
         steps: [
             {
                 id: 'step-1',
-                situation: 'You approach the table and the guest says: "Excuse me, I ordered this medium-rare and it\'s clearly overcooked. This is embarrassing—I have a client here."',
+                situation: 'You approach the table.',
                 guestDialogue: 'I ordered this medium-rare and it\'s clearly overcooked. This is embarrassing—I have a client here.',
                 choices: [
                     {
                         id: 'a',
-                        text: '"I\'m so sorry about that. Let me take this back immediately and have the kitchen prepare a new steak exactly to your preference. In the meantime, may I offer a glass of wine on us while you wait?"',
+                        text: '"I\'m so sorry about that. Let me take this back immediately. I\'ll personally inform Arthur, Debbie, and the Chef to ensure this is corrected right away, and I\'ll be right back to update you."',
                         quality: 'best',
                         points: 10,
-                        feedback: 'Excellent response! You apologized sincerely, took immediate action, and offered something to improve the wait time. This shows ownership and hospitality.'
+                        feedback: 'Excellent response! Prioritizing the removal of the dish and immediately informing key staff (Arthur, Debbie, Chef) sets the recovery in motion correctly.'
                     },
                     {
                         id: 'b',
                         text: '"I apologize for the error. I\'ll have the kitchen remake this right away."',
                         quality: 'acceptable',
                         points: 6,
-                        feedback: 'Good response. You acknowledged the issue and promised action. Consider offering something to ease the wait and acknowledge the business context.'
+                        feedback: 'Good response. You acknowledged the issue and promised action. However, involving the full team (Arthur, Debbie, Chef) is preferred for service recovery.'
                     },
                     {
                         id: 'c',
@@ -99,11 +99,11 @@ export const SCENARIOS: Scenario[] = [
             },
             {
                 id: 'step-2',
-                situation: 'The guest accepts your offer. The new steak will take about 12 minutes. What do you do next?',
+                situation: 'You\'ve removed the dish and informed the team. The new steak will take about 12 minutes. What do you do next?',
                 choices: [
                     {
                         id: 'a',
-                        text: 'Inform the manager, then check back in 5 minutes to ensure the guest is comfortable. When the steak arrives, personally deliver it and verify it meets expectations.',
+                        text: 'Inform the manager, then check back to ensure the guest is comfortable. When the steak arrives, personally deliver it and verify it meets expectations.',
                         quality: 'best',
                         points: 10,
                         feedback: 'Perfect follow-through. Involving the manager ensures proper service recovery, and your personal attention demonstrates genuine care.'
@@ -150,7 +150,7 @@ export const SCENARIOS: Scenario[] = [
         steps: [
             {
                 id: 'step-1',
-                situation: 'The guest says: "I need to tell you before we order—I have a severe shellfish allergy. Like, anaphylactic. I\'ve had restaurants not take it seriously before."',
+                situation: 'The guest looks at you anxiously.',
                 guestDialogue: 'I need to tell you before we order—I have a severe shellfish allergy. Like, anaphylactic. I\'ve had restaurants not take it seriously before.',
                 choices: [
                     {
@@ -300,7 +300,7 @@ export const SCENARIOS: Scenario[] = [
         title: 'VIP Recognition',
         category: 'vip',
         difficulty: 'intermediate',
-        context: 'A local business owner who is a regular and significant spender has arrived. The hostess has informed you this is their table.',
+        context: 'A local business owner who is a regular and significant spender has arrived. Arthur has informed you this is their table.',
         guestProfile: 'The owner of the top real estate firm in town. Dines here monthly, usually brings clients.',
         tableNumber: 3,
         steps: [
@@ -395,6 +395,224 @@ export const SCENARIOS: Scenario[] = [
             'Never let guests wonder where their food is'
         ],
         debriefNotes: 'Delays happen in every restaurant. How you handle them determines whether they become a minor moment or a major complaint.'
+    },
+    {
+        id: 'warm-welcome',
+        title: 'The Warm Welcome',
+        category: 'service',
+        difficulty: 'beginner',
+        context: 'A couple has just been seated at Table 4. They look ready to settle in.',
+        tableNumber: 4,
+        steps: [
+            {
+                id: 'step-1',
+                situation: 'You approach the table for the first time. What is your goal?',
+                choices: [
+                    {
+                        id: 'a',
+                        text: '"Good evening! Welcome to The French Goat. My name is [Name]. May I start you off with some still or sparkling water while you look over the cocktail list?"',
+                        quality: 'best',
+                        points: 10,
+                        feedback: 'Perfect. You greeted them warmly, introduced yourself, and immediately offered water and a path to drinks.'
+                    },
+                    {
+                        id: 'b',
+                        text: '"Hi guys. Do you know what you want to drink?"',
+                        quality: 'poor',
+                        points: 0,
+                        feedback: 'Too casual ("guys") and rushed. You skipped the welcome and the water offer.'
+                    },
+                    {
+                        id: 'c',
+                        text: '"Welcome. Here are the menus. I\'ll be back."',
+                        quality: 'acceptable',
+                        points: 5,
+                        feedback: 'Functional, but cold. You missed the opportunity to build rapport and offer water immediately.'
+                    }
+                ]
+            }
+        ],
+        scoring: {
+            maxPoints: 10,
+            passingPoints: 6,
+            excellentThreshold: 9,
+            categories: [{ name: 'First Impressions', weight: 1 }]
+        },
+        learningObjectives: [
+            'Greet within 1 minute of seating',
+            'Offer water immediately',
+            'Guide guests to the drink menu'
+        ],
+        debriefNotes: 'The first minute sets the tone for the entire meal. Warmth and immediate care (water) make guests feel safe and welcome.'
+    },
+    {
+        id: 'drink-order-upsell',
+        title: 'The Drink Order',
+        category: 'upsell',
+        difficulty: 'beginner',
+        context: 'You are taking the drink order for a table of two. They are hesitant.',
+        tableNumber: 15,
+        steps: [
+            {
+                id: 'step-1',
+                situation: 'One guest says: "I\'ll just have water." The other says: "I don\'t know, maybe a glass of wine? What\'s good?"',
+                guestDialogue: 'I\'ll just have water. ... I don\'t know, maybe a glass of wine? What\'s good?',
+                choices: [
+                    {
+                        id: 'a',
+                        text: '"We have a wonderful Pinot Noir that pairs perfectly with our menu. Would you like to try a splash? And for you, would you prefer sparkling or still water with a slice of lemon?"',
+                        quality: 'best',
+                        points: 10,
+                        feedback: 'Excellent. You addressed the wine question with a specific suggestion and a "taste" offer, and upsold the water experience.'
+                    },
+                    {
+                        id: 'b',
+                        text: '"Everything is good. Do you like red or white?"',
+                        quality: 'acceptable',
+                        points: 5,
+                        feedback: 'A bit generic. Narrowing it down is good, but "everything is good" doesn\'t help a hesitant guest.'
+                    },
+                    {
+                        id: 'c',
+                        text: '"Okay, one water. Let me know when you decide on the wine."',
+                        quality: 'poor',
+                        points: 0,
+                        feedback: 'You walked away from a sale! The guest asked for help; leaving them alone is a service failure.'
+                    }
+                ]
+            }
+        ],
+        scoring: {
+            maxPoints: 10,
+            passingPoints: 6,
+            excellentThreshold: 9,
+            categories: [{ name: 'Sales', weight: 1 }]
+        },
+        learningObjectives: [
+            'Recognize opportunities to suggest specific items',
+            'offer tastes to close the sale with wine',
+            'Clarify water preferences (sparkling/still)'
+        ],
+        debriefNotes: 'Hesitation is an invitation for guidance. Be ready with a specific suggestion.'
+    },
+    {
+        id: 'menu-tour-petite-plates',
+        title: 'Explaining the Menu',
+        category: 'service',
+        difficulty: 'beginner',
+        context: 'Guests are looking at the "Petite Plates" section and look confused.',
+        tableNumber: 10,
+        steps: [
+            {
+                id: 'step-1',
+                situation: 'The guest asks: "Are these appetizers? Can I order just these for dinner?"',
+                guestDialogue: 'Are these appetizers? Can I order just these for dinner?',
+                choices: [
+                    {
+                        id: 'a',
+                        text: '"Absolutely. Our menu is designed for sharing. "Petite Plates" are smaller portions, perfect for trying a few different flavors. Many guests order 2 or 3 per person to make a full meal, or share them before a main course."',
+                        quality: 'best',
+                        points: 10,
+                        feedback: 'Clear, encouraging, and informative. You explained the concept and gave guidance on portion size.'
+                    },
+                    {
+                        id: 'b',
+                        text: '"They are small. You\'ll probably still be hungry if you just get one."',
+                        quality: 'poor',
+                        points: 2,
+                        feedback: 'Honest, but phrased negatively. Focus on what they CAN do (share, order multiple) rather than just saying it\'s not enough.'
+                    },
+                    {
+                        id: 'c',
+                        text: '"They are appetizers."',
+                        quality: 'acceptable',
+                        points: 5,
+                        feedback: 'Technically true, but misses the "French Goat" style of shared dining and creating an experience.'
+                    }
+                ]
+            }
+        ],
+        scoring: {
+            maxPoints: 10,
+            passingPoints: 6,
+            excellentThreshold: 9,
+            categories: [{ name: 'Menu Knowledge', weight: 1 }]
+        },
+        learningObjectives: [
+            'Clearly explain portion sizes and dining style',
+            'Encourage sharing and trying multiple items',
+            'Guide guests on how much to order'
+        ],
+        debriefNotes: 'A clear explanation prevents "hanger" later. Manage expectations about portion sizes gently but clearly.'
+    },
+    {
+        id: 'handling-a-spill',
+        title: 'The Spill',
+        category: 'mistake',
+        difficulty: 'beginner',
+        context: 'A guest gestures wildly while telling a story and knocks a full glass of red wine onto the table and floor.',
+        tableNumber: 2,
+        steps: [
+            {
+                id: 'step-1',
+                situation: 'Red wine spreads across the white tablecloth. The guest looks mortified.',
+                choices: [
+                    {
+                        id: 'a',
+                        text: '"Oh goodness, don\'t worry at all! Accidents happen. Let me help you move back so it doesn\'t get on your clothes."',
+                        quality: 'best',
+                        points: 10,
+                        feedback: 'Perfect reaction. Your first priority is the guest\'s comfort and dignity, not the mess.'
+                    },
+                    {
+                        id: 'b',
+                        text: '"Oh no! That\'s going to stain. I\'ll get a rag."',
+                        quality: 'acceptable',
+                        points: 4,
+                        feedback: 'You reacted to the mess, but made the guest feel guilty ("That\'s going to stain"). Comfort the guest first.'
+                    },
+                    {
+                        id: 'c',
+                        text: 'Sigh loudly and go get a towel.',
+                        quality: 'poor',
+                        points: 0,
+                        feedback: 'Never make a guest feel like a burden. Accidents are part of the job.'
+                    }
+                ]
+            },
+            {
+                id: 'step-2',
+                situation: 'You\'ve moved the guests to safety. What is your cleanup strategy?',
+                choices: [
+                    {
+                        id: 'a',
+                        text: 'Place a clean napkin over the spill immediately to absorb it. If the table is bad, offer to move them to a new table or quickly replace the tablecloth with a colleague\'s help.',
+                        quality: 'best',
+                        points: 10,
+                        feedback: 'Proactive and thorough. Covering the spill hides the "evidence" so they can relax. Moving them or resetting is the classy move.'
+                    },
+                    {
+                        id: 'b',
+                        text: 'Wipe it up with bar towels while they sit there.',
+                        quality: 'poor',
+                        points: 3,
+                        feedback: 'Wiping a big puddle while guests watch is awkward and smelly. Cover it or reset the setting properly.'
+                    }
+                ]
+            }
+        ],
+        scoring: {
+            maxPoints: 20,
+            passingPoints: 12,
+            excellentThreshold: 18,
+            categories: [{ name: 'Composure', weight: 1 }]
+        },
+        learningObjectives: [
+            'Prioritize guest comfort over the mess',
+            'React calmly without judgment',
+            'Clean up efficiently and discreetly'
+        ],
+        debriefNotes: 'How you handle an accident defines their memory of it. If you are gracious, they will remember your kindness, not the spill.'
     }
 ];
 

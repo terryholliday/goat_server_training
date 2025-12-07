@@ -15,6 +15,11 @@ type ViewMode = 'menu' | 'learn' | 'flashcards' | 'practice';
 
 const BASE_IMG_PATH = "/";
 
+const GENERATED_IMAGES = [
+    'tuna-nicoise', 'creme-brulee', 'french-goat-burger', 'steak-frites',
+    'escargot-traditional', 'french-onion-soup', 'duck-leg-confit', 'chocolate-mousse'
+];
+
 // Convert menu items to flashcards
 const createMenuFlashcards = (): FlashcardDeck => {
     // Filter for food-appropriate images (excluding wine/drinks/storefront if possible, or just use all)
@@ -27,8 +32,10 @@ const createMenuFlashcards = (): FlashcardDeck => {
         front: {
             title: item.name,
             subtitle: `$${item.price} • ${item.category}`,
-            // Deterministically assign an image based on index
-            image: `${BASE_IMG_PATH}${foodImages[index % foodImages.length]}`
+            // Prioritize generated specific image, else deterministically assign based on index
+            image: GENERATED_IMAGES.includes(item.id)
+                ? `${BASE_IMG_PATH}${item.id}.png`
+                : `${BASE_IMG_PATH}${foodImages[index % foodImages.length]}`
         },
         back: {
             mainContent: item.description,
@@ -169,13 +176,22 @@ export const MenuMasterySection: React.FC<MenuMasterySectionProps> = ({ onComple
                     </div>
 
                     {/* Complete Button */}
-                    {flashcardsCompleted && (
-                        <div className="text-center pt-4">
-                            <Button onClick={onComplete} variant="primary">
-                                Complete Section ✓
-                            </Button>
-                        </div>
-                    )}
+                    {/* Complete Button */}
+                    <div className="text-center pt-8 border-t border-purple-100 flex flex-col gap-3 items-center">
+                        {flashcardsCompleted && (
+                            <p className="text-green-600 font-medium animate-pulse">
+                                Flashcards Mastered!
+                            </p>
+                        )}
+                        <Button onClick={onComplete} variant={flashcardsCompleted ? 'primary' : 'outline'}>
+                            {flashcardsCompleted ? 'Complete Section ✓' : 'Mark Section Completed'}
+                        </Button>
+                        {!flashcardsCompleted && (
+                            <p className="text-xs text-gray-400 max-w-xs mx-auto">
+                                You can mark this as completed if you've studied the menu extensively offline.
+                            </p>
+                        )}
+                    </div>
                 </div>
             </SectionWrapper>
         );

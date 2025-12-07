@@ -108,7 +108,7 @@ export interface ScoringCriteria {
 export interface Scenario {
     id: string;
     title: string;
-    category: 'complaint' | 'allergy' | 'vip' | 'timing' | 'mistake' | 'pressure' | 'upsell';
+    category: 'complaint' | 'allergy' | 'vip' | 'timing' | 'mistake' | 'pressure' | 'upsell' | 'service';
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     context: string;
     guestProfile?: string;

@@ -3,7 +3,7 @@ import type { Flashcard as FlashcardType, FlashcardDeck } from '../types/enhance
 import { Button } from './Button';
 import { ProgressBar } from './ProgressBar';
 import { SectionWrapper } from './SectionWrapper';
-import { SafeImage } from './SafeImage';
+
 
 interface FlashcardProps {
     card: FlashcardType;
@@ -34,22 +34,13 @@ const FlashcardCard: React.FC<FlashcardProps> = ({ card, isFlipped, onFlip }) =>
                     className="absolute w-full h-full bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl shadow-lg border-2 border-amber-200 p-6 flex flex-col items-center justify-center overflow-hidden"
                     style={{ backfaceVisibility: 'hidden' }}
                 >
-                    {card.front.image && (
-                        <div className="w-full h-40 mb-4 overflow-hidden rounded-lg bg-white/50 flex items-center justify-center">
-                            <SafeImage
-                                src={card.front.image}
-                                alt={card.front.title}
-                                className="w-full h-full object-contain"
-                            />
-                        </div>
-                    )}
-                    <div className="text-center">
-                        <h3 className="text-2xl font-bold text-amber-900 mb-2">{card.front.title}</h3>
+                    <div className="text-center space-y-4">
+                        <h3 className="text-3xl font-bold text-amber-900 leading-tight">{card.front.title}</h3>
                         {card.front.subtitle && (
-                            <p className="text-amber-700 italic">{card.front.subtitle}</p>
+                            <p className="text-xl text-amber-700 italic">{card.front.subtitle}</p>
                         )}
                     </div>
-                    <p className="text-sm text-amber-600 mt-4">Tap to flip</p>
+                    <p className="text-sm text-amber-600 mt-8 font-medium">Tap to flip</p>
                 </div>
 
                 {/* Back of card */}
