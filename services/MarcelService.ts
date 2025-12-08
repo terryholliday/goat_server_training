@@ -108,7 +108,14 @@ class MarcelService {
     }
 
     private containsAny(text: string, keywords: string[]): boolean {
-        return keywords.some(keyword => text.includes(keyword));
+        // Ensure we only match whole words/phrases so "hi" does not match "chicken"
+        const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        return keywords.some(keyword => {
+            const pattern = `\\b${escapeRegExp(keyword.trim())}\\b`;
+            const regex = new RegExp(pattern, 'i');
+            return regex.test(text);
+        });
     }
 }
 
