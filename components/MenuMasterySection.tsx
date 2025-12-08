@@ -232,7 +232,21 @@ export const MenuMasterySection: React.FC<MenuMasterySectionProps> = ({ onComple
                                                         <div>
                                                             <h4 className="font-semibold text-gray-800">{item.name}</h4>
                                                             {item.pronunciation && (
-                                                                <p className="text-xs text-indigo-600 font-mono">🔊 {item.pronunciation}</p>
+                                                                <div className="flex items-center gap-2">
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            import('../services/SoundService').then(({ soundService }) => {
+                                                                                soundService.speak(item.name);
+                                                                            });
+                                                                        }}
+                                                                        className="text-indigo-600 hover:scale-110 transition-transform p-1 rounded-full hover:bg-indigo-50"
+                                                                        title="Listen to pronunciation"
+                                                                    >
+                                                                        🔊
+                                                                    </button>
+                                                                    <p className="text-xs text-indigo-600 font-mono">{item.pronunciation}</p>
+                                                                </div>
                                                             )}
                                                         </div>
                                                         <span className="text-purple-700 font-bold">${item.price}</span>

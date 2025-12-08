@@ -43,13 +43,29 @@ class SoundService {
     private currentAudio: HTMLAudioElement | null = null;
 
     // Speak text using Web Speech API or play Audio file
-    // AUDIO DISABLED - Marcel is silent
     public speak(text: string, audioFile?: string, options?: { onEnded?: () => void }) {
-        // Audio is disabled - call onEnded immediately so UI doesn't hang
-        if (options?.onEnded) {
-            setTimeout(() => options.onEnded!(), 100);
+        if (!this.speechSynthesis) {
+            if (options?.onEnded) options.onEnded();
+            return;
         }
-        return;
+
+        // Cancel any current speaking
+        this.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'fr-FR'; // French accent for our French Goat!
+        utterance.rate = 0.9; // Slightly slower for clarity
+
+        utterance.onend = () => {
+            if (options?.onEnded) options.onEnded();
+        };
+
+        utterance.onerror = (e) => {
+            console.error('Speech synthesis error:', e);
+            if (options?.onEnded) options.onEnded();
+        };
+
+        this.speechSynthesis.speak(utterance);
     }
 }
 

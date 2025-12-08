@@ -54,7 +54,20 @@ export const TermsSection: React.FC<TermsSectionProps> = ({ onComplete }) => {
             )}
             <div className="p-4">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white">{term.term}</h3>
-              <p className="text-sm italic text-rose-600 dark:text-rose-400 mb-2">{term.pronunciation}</p>
+              <div className="flex items-center gap-2 mb-2">
+                <button
+                  onClick={() => {
+                    import('../services/SoundService').then(({ soundService }) => {
+                      soundService.speak(term.term);
+                    });
+                  }}
+                  className="text-rose-600 hover:scale-110 transition-transform p-1 rounded-full hover:bg-rose-50"
+                  title="Listen to pronunciation"
+                >
+                  🔊
+                </button>
+                <p className="text-sm italic text-rose-600 dark:text-rose-400">{term.pronunciation}</p>
+              </div>
               <p className="text-sm text-gray-600 dark:text-gray-300">{term.definition}</p>
             </div>
           </div>
